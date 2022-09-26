@@ -44,7 +44,7 @@
 	$nombreAlmacenSesion=$dat_almacen[1];
 	
 	
-	$sqlNombreEmpresa="select nombre from datos_empresa where cod_empresa=1";
+	$sqlNombreEmpresa="select nombre from datos_empresa where cod_empresa=2";
 	$respNombreEmpresa=mysqli_query($enlaceCon,$sqlNombreEmpresa);
 	$datNombreEmpresa=mysqli_fetch_array($respNombreEmpresa);
 	$nombreEmpresa=$datNombreEmpresa[0];

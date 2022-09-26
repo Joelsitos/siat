@@ -336,19 +336,6 @@ text-align: right;
 text-align: left;  
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 .sbody{font-family:  sans-serif; font-size: 10px;}
 .header2 { position: fixed; top: -10px; left: 0px; right: 0px; height: 70px;}
 .headDes { position: fixed; top: 30px; left: 0px; right: 40px; height: 70px;}
@@ -524,8 +511,19 @@ border-bottom: 1px solid #000;
 <div  style="height: 49.4%">
         <table  style="width: 100%;">
             <tr>
-                <td align="center" width="45%"><br><br>
-                    </small></small>
+                <td align="center" width="45%">
+                  <img class="imagen-logo-izq_2" src="imagenes/logo_ibnorca_origen_3.jpg">
+                        <br><br>
+                        <span><b><u>
+                          Instituto Boliviano de Normalización y Calidad</u><br>
+                          CASA MATRIZ - 0</b></span><br>
+                          <span><small><small>
+                          Calle 7 N° 545 casi esq. Av. 14 de Septiembre * Zona Obrajes<br>
+                          Teléfonos:(591-2) 2783628 - 2788368 - 2788609<br>
+                          Web:www.ibnorca.org * E-mail:info@ibnorca.org<br>La Paz - Bolivia <br>
+                          SFC - 04
+                        </span></small></small>
+                    
                 </td>
                 
                 <td >
