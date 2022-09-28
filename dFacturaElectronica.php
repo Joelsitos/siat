@@ -157,6 +157,56 @@ $estadoFacturacion=$datConf[0];
   }
 }
 </style>
+<script type="text/javascript">
+  
+  function anular_salida_siat(codReg){
+    var parametros={"codigo":codReg};
+    $.ajax({
+          type: "GET",
+          dataType: 'html',
+          url: "programas/salidas/frmConfirmarCodigoSalida_siat.php",
+          data: parametros,
+          success:  function (resp) { 
+              $("#datos_anular").html(resp);
+              $("#codigo_salida").val(codReg);
+              $("#contrasena_admin").val("");
+              $("#modalAnularFactura").modal("show");           
+        }
+    }); 
+  }
+
+  function confirmarCodigo(){ 
+    document.getElementById('boton_anular').style.visibility='hidden';
+   // var cod_sucursal=document.getElementById("cod_sucursal").value;  
+   // var cod_personal=document.getElementById("cod_personal").value;  
+   
+  var cad1=$("input#idtxtcodigo").val();
+  var cad2=$("input#idtxtclave").val(); 
+  var per=$("#rpt_personal").val(); 
+
+  // var rpt_tipoanulacion=$("#rpt_tipoanulacion").val(); 
+  // var glosa_anulacion=$("input#glosa_anulacion").val(); 
+
+  var enviar_correo=$("input#enviar_correo").val();
+  var correo_destino=$("input#correo_destino").val();
+
+  var parametros={"codigo":cad1,"clave":cad2,"per":per};
+  $.ajax({
+        type: "GET",
+        dataType: 'html',
+        url: "programas/salidas/validacionCodigoConfirmar_siat.php",
+        data: parametros,
+        success:  function (resp) { 
+            if(resp==1) {
+                location.href='anular_venta_siat.php?codigo_registro='+$("#codigo_salida").val()+'&id_caja='+per+'&enviar_correo='+enviar_correo+'&correo_destino='+correo_destino;
+            }else{
+               Swal.fire("Error!","El codigo que ingreso es incorrecto","error");
+               $("#modalAnularFactura").modal("hide");    
+            }
+      }
+ }); 
+}
+</script>
 <div class="card">
     <div class="card-header card-header-primary">
         <h4>Detalle de Factura Electronica SIAT</h4>
@@ -201,6 +251,17 @@ $estadoFacturacion=$datConf[0];
                <p>FACTURA COMPUTARIZADA</p>
             </div>
          </a>
+        </div>
+        <div class="col-lg-4 col-md-8 mb-5 mb-lg-0 mx-auto">
+         <button class="after-loop-item card border-0 card-tercero shadow-lg" style="background:#FF5733;color:#fff;" onclick='anular_salida_siat(<?=$codigo_salida?>)'>
+            <div class="card-body d-flex align-items-center flex-column">
+              <center>
+               <h4><i class="material-icons">delete</i> <b>ANULAR FACTURA</b></h4>
+               </center>
+               <p>FACTURA COMPUTARIZADA</p>
+            </div>
+         </button>
+         
         </div>
         </div>
         <center>
@@ -342,3 +403,28 @@ $estadoFacturacion=$datConf[0];
         <p>Departamento de Sistemas - COBOFAR </p>
     </div-->
 </div>
+
+<!-- small modal -->
+<div class="modal fade modal-primary" id="modalAnularFactura" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="background-color: rgba(0,0,0, 0.5) !important;">
+  <div class="modal-dialog modal-lg" >
+    <div class="modal-content card">
+        <div class="card-header card-header-danger card-header-icon">
+          <div class="card-icon">
+            <i class="material-icons">delete</i>
+          </div>
+          <h4 class="card-title text-danger font-weight-bold">Anulación de Facturas</h4>
+          <button type="button" class="btn btn-danger btn-sm btn-fab float-right" data-dismiss="modal" aria-hidden="true" style="position:absolute;top:0px;right:0;">
+            <i class="material-icons">close</i>
+          </button>
+        </div>
+        <input type="hidden" name="codigo_salida" id="codigo_salida" value="0">
+        <div class="card-body" id="datos_anular">
+           
+        </div>
+        <div class="card-footer" >
+           <button id="boton_anular" name="boton_anular" class="btn btn-default" onclick="confirmarCodigo()">ANULAR</button>
+        </div>
+    </div>  
+    </div>
+</div>
+<!--    end small modal -->

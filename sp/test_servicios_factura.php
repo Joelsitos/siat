@@ -111,6 +111,7 @@ $parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey,
    "descuento"=>$descuento,
    "monto_final"=>$monto_final,
    "id_usuario"=>$id_usuario,//***
+   "usuario"=>$usuario,//***
    "nitCliente"=>$nitCliente,
    "nombreFactura"=>$nombreFactura,   
    "tipoPago"=>$tipoPago,

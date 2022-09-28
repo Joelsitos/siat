@@ -535,13 +535,13 @@ $txtMonto=NumeroALetras::convertir($montoEntero);
 
 
 <?php
-$cadenaQR=$nitTxt."|".$nroDocVenta."|".$nroAutorizacion."|".$fechaVenta."|".$montoTotal."|".$montoFinal."|".$codigoControl."|".$nitCliente."|0|0|0|".($descuentoVentaProd+$descuentoVenta);
-$codeContents = $cadenaQR; 
+// $cadenaQR=$nitTxt."|".$nroDocVenta."|".$nroAutorizacion."|".$fechaVenta."|".$montoTotal."|".$montoFinal."|".$codigoControl."|".$nitCliente."|0|0|0|".($descuentoVentaProd+$descuentoVenta);
+// $codeContents = $cadenaQR; 
 
-$fechahora=date("dmy.His");
-$fileName="qrs/".$fechahora.$nroDocVenta.".png"; 
+// $fechahora=date("dmy.His");
+// $fileName="qrs/".$fechahora.$nroDocVenta.".png"; 
     
-QRcode::png($codeContents, $fileName,QR_ECLEVEL_L, 3);
+// QRcode::png($codeContents, $fileName,QR_ECLEVEL_L, 3);
 
 ?>
 <!-- <img src="<?=$fileName?>" style="margin: 0px;padding: 0;"> -->

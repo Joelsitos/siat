@@ -640,15 +640,15 @@ border-bottom: 1px solid #000;
 
                     ?>
                     <tr>
-                        <td class="text-left" valign="top" style="padding-top: 0px;padding-bottom: 0px; border-bottom: hidden;border-top: hidden; font-size: 8px;"><?=$codInterno?></td>
+                        <td class="text-center" valign="top" style="padding-top: 0px;padding-bottom: 0px; border-bottom: hidden;border-top: hidden; font-size: 8px;"><?=$codInterno?></td>
                         <td class="text-left" valign="top" style="padding-top: 0px;padding-bottom: 0px; border-bottom: hidden;border-top: hidden; font-size: 8px;">
                             <?=$nombreMat;?>
                         </td>
-                        <td style="padding-top: 0px;padding-bottom: 0px; border-bottom: hidden;border-top: hidden; font-size: 8px;"><small><?=$unidad_medida?></small></td>
-                        <td style="padding-top: 0px;padding-bottom: 0px; border-bottom: hidden;border-top: hidden; font-size: 8px;"><?=$cantUnit?></td>
-                        <td style="padding-top: 0px;padding-bottom: 0px; border-bottom: hidden;border-top: hidden; font-size: 8px;"><?=number_format($precioUnitFactura,2)?></td>
-                        <td style="padding-top: 0px;padding-bottom: 0px; border-bottom: hidden;border-top: hidden; font-size: 8px;"><?=number_format($descUnit,2)?></td>
-                        <td style="padding-top: 0px;padding-bottom: 0px; border-bottom: hidden;border-top: hidden; font-size: 8px;"><?=number_format($montoUnitProdDesc,2)?></td>
+                        <td class="text-center" style="padding-top: 0px;padding-bottom: 0px; border-bottom: hidden;border-top: hidden; font-size: 8px;"><small><?=$unidad_medida?></small></td>
+                        <td class="text-center" style="padding-top: 0px;padding-bottom: 0px; border-bottom: hidden;border-top: hidden; font-size: 8px;"><?=$cantUnit?></td>
+                        <td class="text-right" style="padding-top: 0px;padding-bottom: 0px; border-bottom: hidden;border-top: hidden; font-size: 8px;"><?=number_format($precioUnitFactura,2)?></td>
+                        <td class="text-right" style="padding-top: 0px;padding-bottom: 0px; border-bottom: hidden;border-top: hidden; font-size: 8px;"><?=number_format($descUnit,2)?></td>
+                        <td class="text-right" style="padding-top: 0px;padding-bottom: 0px; border-bottom: hidden;border-top: hidden; font-size: 8px;"><?=number_format($montoUnitProdDesc,2)?></td>
                     </tr>
                     
                     <?php $contador_items++;

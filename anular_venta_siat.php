@@ -142,9 +142,9 @@ if($anulado==0){ //verificamos si no está anulado // 0 no anulada 1 //anulado
 				    html: '".$texto_correo."',
 				    type: 'success'
 					}).then(function() {
-					    location.href='navegadorVentas.php';
+					    location.href='dFacturaElectronica.php?codigo_salida=".$codigo_registro."';
 					});
-					</script>";
+					</script>";//location.href='navegadorVentas.php';
 			}else{
 				echo "<script language='Javascript'>
 				Swal.fire({
@@ -153,9 +153,9 @@ if($anulado==0){ //verificamos si no está anulado // 0 no anulada 1 //anulado
 			    text: '',
 			    type: 'success'
 				}).then(function() {
-				    location.href='navegadorVentas.php';
+				    location.href='dFacturaElectronica.php?codigo_salida=".$codigo_registro."';
 				});
-				</script>";	//location.href='navegadorVentas.php';
+				</script>";	//location.href='dFacturaElectronica.php?codigo_salida=".$codigo_registro."';
 			}
 
 		}else{
@@ -165,7 +165,7 @@ if($anulado==0){ //verificamos si no está anulado // 0 no anulada 1 //anulado
 			    text: '',
 			    type: 'error'
 			}).then(function() {
-			    location.href='navegadorVentas.php';
+			    location.href='dFacturaElectronica.php?codigo_salida=".$codigo_registro."';
 			});
 			</script>";
 		}
@@ -176,7 +176,7 @@ if($anulado==0){ //verificamos si no está anulado // 0 no anulada 1 //anulado
 		    text: '',
 		    type: 'error'
 		}).then(function() {
-		    location.href='navegadorVentas.php';
+		    location.href='dFacturaElectronica.php?codigo_salida=".$codigo_registro."';
 		});
 				</script>";		
 	}
@@ -187,7 +187,7 @@ if($anulado==0){ //verificamos si no está anulado // 0 no anulada 1 //anulado
 	    text: '',
 	    type: 'error'
 	}).then(function() {
-	    location.href='navegadorVentas.php';
+	    location.href='dFacturaElectronica.php?codigo_salida=".$codigo_registro."';
 	});
 			</script>";	
 }
@@ -197,7 +197,7 @@ if($anulado==0){ //verificamos si no está anulado // 0 no anulada 1 //anulado
 
 // echo "<script language='Javascript'>
 // 		alert('El registro fue anulado.');
-// 		location.href='navegadorVentas.php';
+// 		location.href='dFacturaElectronica.php?codigo_salida=$codigo_registro';
 // 		</script>";
 
 ?>

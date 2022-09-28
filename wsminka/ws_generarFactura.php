@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {//verificamos  metodo conexion
                         // $nitEmpresa=$datos['nitEmpresa'];//
                         // if(verificarExistenciaEmpresa($idEmpresa,$nitEmpresa,$enlaceCon)){
 
-                            if(isset($datos['sucursal']) && isset($datos['idRecibo']) && isset($datos['fecha']) && isset($datos['idPersona']) && isset($datos['id_usuario']) && isset($datos['nitCliente']) && isset($datos['nombreFactura']) && isset($datos['tipoPago']) && isset($datos['tipoDocumento']) && isset($datos['complementoDocumento']) && isset($datos['items']) && isset($datos['monto_total']) && isset($datos['descuento']) && isset($datos['monto_final'])){ // && isset($datos['periodoFacturado']) && isset($datos['NombreEstudiante'])
+                            if(isset($datos['sucursal']) && isset($datos['idRecibo']) && isset($datos['fecha']) && isset($datos['idPersona']) && isset($datos['id_usuario']) && isset($datos['usuario']) && isset($datos['nitCliente']) && isset($datos['nombreFactura']) && isset($datos['tipoPago']) && isset($datos['tipoDocumento']) && isset($datos['complementoDocumento']) && isset($datos['items']) && isset($datos['monto_total']) && isset($datos['descuento']) && isset($datos['monto_final'])){ // && isset($datos['periodoFacturado']) && isset($datos['NombreEstudiante'])
                                 $sucursal=$datos['sucursal'];
                                 // $tipoTabla=$datos['tipoTabla'];
                                 $idRecibo=$datos['idRecibo'];
@@ -31,6 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {//verificamos  metodo conexion
                                 $monto_final=$datos['monto_final'];
 
                                 $id_usuario=$datos['id_usuario'];
+                                $usuario=$datos['usuario'];
                                 $nitCliente=$datos['nitCliente'];
                                 $nombreFactura=$datos['nombreFactura'];
                                 // $Concepto=$datos['Concepto'];
@@ -45,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {//verificamos  metodo conexion
 
                                 $items=$datos['items'];//recibimos array de detalle
 
-                                $datosFactura=generarFacturaSiat($sucursal,$idRecibo,$fecha,$idPersona,$monto_total,$descuento,$monto_final,$id_usuario,$nitCliente,$nombreFactura,$NombreEstudiante,$tipoPago,$nroTarjeta,$tipoDocumento,$complementoDocumento,$periodoFacturado,$items);
+                                $datosFactura=generarFacturaSiat($sucursal,$idRecibo,$fecha,$idPersona,$monto_total,$descuento,$monto_final,$id_usuario,$usuario,$nitCliente,$nombreFactura,$NombreEstudiante,$tipoPago,$nroTarjeta,$tipoDocumento,$complementoDocumento,$periodoFacturado,$items);
 
                                 $estado=$datosFactura[0];//estado
                                 $mensaje=$datosFactura[1];//mensaje
@@ -105,7 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {//verificamos  metodo conexion
     echo json_encode($resultado);
 }
 
-function generarFacturaSiat($sucursal,$idRecibo,$fecha,$idPersona,$monto_total,$descuento,$monto_final,$id_usuario,$nitCliente,$nombreFactura,$NombreEstudiante,$tipoPago,$nroTarjeta,$tipoDocumento,$complementoDocumento,$periodoFacturado,$items){
+function generarFacturaSiat($sucursal,$idRecibo,$fecha,$idPersona,$monto_total,$descuento,$monto_final,$id_usuario,$siat_usuario,$nitCliente,$nombreFactura,$NombreEstudiante,$tipoPago,$nroTarjeta,$tipoDocumento,$complementoDocumento,$periodoFacturado,$items){
 
     $start_time = microtime(true);
     require_once "../conexionmysqli2.php";
@@ -296,10 +297,10 @@ function generarFacturaSiat($sucursal,$idRecibo,$fecha,$idPersona,$monto_total,$
                 `almacen_destino`, `observaciones`, `estado_salida`, `nro_correlativo`, `salida_anulada`, 
                 `cod_cliente`, `monto_total`, `descuento`, `monto_final`, razon_social, nit, cod_chofer, cod_vehiculo, monto_cancelado, cod_dosificacion, monto_efectivo,
                 monto_cambio,cod_tipopago,created_by,created_at,cod_tipopreciogeneral,cod_tipoventa2,monto_cancelado_bs,monto_cancelado_usd,tipo_cambio,cod_delivery,
-                siat_cuis,siat_cuf,siat_codigotipodocumentoidentidad,siat_complemento,siat_codigoPuntoVenta,siat_excepcion,siat_codigocufd,siat_cod_leyenda,siat_nombreEstudiante,siat_periodoFacturado)
+                siat_cuis,siat_cuf,siat_codigotipodocumentoidentidad,siat_complemento,siat_codigoPuntoVenta,siat_excepcion,siat_codigocufd,siat_cod_leyenda,siat_nombreEstudiante,siat_periodoFacturado,siat_usuario)
                 values ('$codigo', '$almacenOrigen', '$tipoSalida', '$tipoDoc', '$fecha', '$hora', '0', '$almacenDestino', 
                 '$observaciones', '1', '$nro_correlativo', 0, '$codCliente', '$totalVenta', '$descuentoVenta', '$totalFinal', '$razonSocial', 
-                '$nitCliente', '$usuarioVendedor', '$vehiculo',0,'$cod_dosificacion','$totalEfectivo','$totalCambio','$tipoVenta','$created_by','$created_at','$cod_tipopreciogeneral','$cod_tipoVenta2','$monto_bs','$monto_usd','$tipo_cambio','$cod_tipodelivery','$cuis','$cuf','$siat_codigotipodocumentoidentidad','$complemento','$codigoPuntoVenta',$excepcion,'$codigoCufd','$cod_leyenda','$NombreEstudiante','$periodoFacturado')";         
+                '$nitCliente', '$usuarioVendedor', '$vehiculo',0,'$cod_dosificacion','$totalEfectivo','$totalCambio','$tipoVenta','$created_by','$created_at','$cod_tipopreciogeneral','$cod_tipoVenta2','$monto_bs','$monto_usd','$tipo_cambio','$cod_tipodelivery','$cuis','$cuf','$siat_codigotipodocumentoidentidad','$complemento','$codigoPuntoVenta',$excepcion,'$codigoCufd','$cod_leyenda','$NombreEstudiante','$periodoFacturado','$siat_usuario')";         
             $sql_inserta=mysqli_query($enlaceCon,$sql_insert);
         // }
         $contador++;
