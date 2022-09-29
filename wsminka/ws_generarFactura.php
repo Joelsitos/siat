@@ -1,8 +1,40 @@
 <?php
+$start_time = microtime(true);
+function insertarlogFacturas_entrada($json,$mensaje,$enlaceCon){
+    // $dbh = new Conexion();    
+    // $sql="INSERT INTO log_facturas(fecha,detalle_error,json) values(NOW(),'$mensaje','$json')";
+    // $stmt = $dbh->prepare($sql);
+    // $stmt->execute();
 
+    $jsonString=json_encode($json);
+    $fechaActualX=date('Y-m-d H:i:s');
+    $sql="INSERT INTO log_facturas(fecha,detalle_error,json) values('$fechaActualX','$mensaje','$json')";
+    // echo $sqlUpdate;
+    // echo "<br>";
+    $resp=mysqli_query($enlaceCon,$sql);
+}
+
+function InsertlogFacturas_salida($cod_error,$detalle_error,$json,$enlaceCon){  
+    // $dbh = new Conexion();    
+    // $sql="INSERT INTO log_facturas(fecha,cod_error,detalle_error,json) values(NOW(),'$cod_error','$detalle_error','$json')";
+    // $stmt = $dbh->prepare($sql);
+    // $stmt->execute();
+    // require_once '../conexionmysqli2.php';
+    // print_r($json);
+    $jsonString=json_encode($json);
+    $fechaActualX=date('Y-m-d H:i:s');
+    $sqlUpdate="INSERT INTO log_facturas(fecha,cod_error,detalle_error,json) values('$fechaActualX','$cod_error','$detalle_error','$jsonString')";
+    // echo $sqlUpdate;
+    // echo "<br>";
+    $resp=mysqli_query($enlaceCon,$sqlUpdate);
+}
 // SERVICIO WEB PARA FACTURAS
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {//verificamos  metodo conexion
-    $datos = json_decode(file_get_contents("php://input"), true); 
+    // $datos = json_decode(file_get_contents("php://input"), true); 
+    require_once '../conexionmysqli2.php';    
+    $json=file_get_contents("php://input");
+    insertarlogFacturas_entrada($json,'Entrada json',$enlaceCon);
+    $datos = json_decode($json, true);
     //Parametros de consulta
     $accion=NULL;
     if(isset($datos['accion'])&&isset($datos['sIdentificador'])&&isset($datos['sKey'])){//verificamos existencia de datos de conexion
@@ -12,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {//verificamos  metodo conexion
             $estado=0;
             $mensaje="";
             if($accion=="generarFacturaMinka"){//obtenemos las ciudades del cliente
-                    require_once '../conexionmysqli2.php';
+                    // require_once '../conexionmysqli2.php';
                     require_once '../siat_folder/funciones_servicios.php';
                     // if(isset($datos['idEmpresa'])){
                         // $idEmpresa=$datos['idEmpresa'];//
@@ -72,8 +104,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {//verificamos  metodo conexion
                                     );
 
                             }else{
+                                $mensaje="ERROR. Variables incompletas";
                                 $resultado=array("estado"=>4,
-                                "mensaje"=>"ERROR. Variables incompletas");
+                                "mensaje"=>$mensaje);
+                                InsertlogFacturas_salida(4,$mensaje,null,$enlaceCon);
                             }
                                                         
                         // }else{
@@ -85,11 +119,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {//verificamos  metodo conexion
                     //     "mensaje"=>"ERROR. Variables incompletas");
                     // }
             }else{
+                $mensaje="ERROR. No existe la Accion Solicitada.";
                 $resultado=array("estado"=>4,
-                    "mensaje"=>"ERROR. No existe la Accion Solicitada.");
+                    "mensaje"=>$mensaje);
+                InsertlogFacturas_salida(4,$mensaje,null,$enlaceCon);
             }
         }else{
-            $resultado=array("estado"=>3,"mensaje"=>"ACCESO DENEGADO!. Credenciales Incorrectos.");
+            $mensaje="ACCESO DENEGADO!. Credenciales Incorrectos.";
+            $resultado=array("estado"=>3,"mensaje"=>$mensaje);
+            InsertlogFacturas_salida(3,$mensaje,null,$enlaceCon);
         }
     }else{
         $resultado=array(
@@ -355,6 +393,7 @@ function generarFacturaSiat($sucursal,$idRecibo,$fecha,$idPersona,$monto_total,$
                 $recepcion=$datPV[0];
 
                 $errorFacturaXml=0;
+                $json=null;
                 if($recepcion==""){         
                     // require_once "../siat_folder/funciones_siat.php";
                     $errorConexion=verificarConexion()[0];
@@ -378,7 +417,8 @@ function generarFacturaSiat($sucursal,$idRecibo,$fecha,$idPersona,$monto_total,$
                         $respUpdMonto=mysqli_query($enlaceCon,$sqlUpdMonto);
                         $errorFacturaXml=1;
                         // echo $sqlUpdMonto;
-                    }           
+                    }          
+                    $json=$facturaImpuestos[0];           
                 }
                 if($errorFacturaXml==0){
                     $estado_facturado=0;
@@ -389,6 +429,7 @@ function generarFacturaSiat($sucursal,$idRecibo,$fecha,$idPersona,$monto_total,$
                     $mensaje="Factura emitida fuera de línea :(";               
                     $url="location.href='dFacturaElectronica.php?codigo_salida=$codigo';";
                 }
+                InsertlogFacturas_salida($estado_facturado,$mensaje,$json,$enlaceCon);
                 //SACAMOS LA VARIABLE PARA ENVIAR EL CORREO O NO SI ES 1 ENVIAMOS CORREO DESPUES DE LA TRANSACCION
                 // $banderaCorreo=obtenerValorConfiguracion($enlaceCon,10);
                 $banderaCorreo=0;
@@ -455,6 +496,7 @@ function generarFacturaSiat($sucursal,$idRecibo,$fecha,$idPersona,$monto_total,$
 
         $mensaje="Ocurrio un error en la transaccion. Contacte con el administrador del sistema";
         $estado_facturado=2;//error
+        InsertlogFacturas_salida($estado_facturado,$mensaje,null,$enlaceCon);
         return array($estado_facturado,$mensaje,$codigo,$nro_correlativo);
     }   
 }
