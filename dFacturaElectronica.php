@@ -2,6 +2,12 @@
 <?php
 require "conexionmysqli.inc";
 $codSalida=$_GET['codigo_salida'];
+//obtenemos la sucursal de la factura
+$sql="SELECT a.cod_ciudad from salida_almacenes s join almacenes a on s.cod_almacen=a.cod_almacen where s.cod_salida_almacenes='$codSalida'";
+// echo $sql;
+$respq=mysqli_query($enlaceCon,$sql);
+$globalSucursal=mysqli_result($respq,0,0);
+// $globalSucursal=$_COOKIE['global_agencia'];
 
 ?>
 <script>
@@ -41,7 +47,6 @@ if(isset($_GET['r'])){
 
         $errorFacturaXml=0; $mens="";
         if($recepcion==""){
-            $globalSucursal=$_COOKIE['global_agencia'];
             $anio=date("Y");
             $sqlCuis="select cuis FROM siat_cuis where cod_ciudad='$globalSucursal' and estado=1 and cod_gestion='$anio' LIMIT 1";
             $respCuis=mysqli_query($enlaceCon,$sqlCuis);
@@ -103,7 +108,7 @@ if(isset($_GET['r'])){
 }else{
     require_once "siat_folder/funciones_siat.php";     
     try {
-        $resEstado=verificarEstadoFactura($codSalida);
+      $resEstado=verificarEstadoFactura($codSalida,$globalSucursal);
     } catch (Exception $e) {
         //asignar alguna alerta
     }

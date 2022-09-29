@@ -15,7 +15,11 @@ if(isset($_GET["codVenta"])){
     $codigoVenta=$codigoVenta;
 }
 
-$cod_ciudad=$_COOKIE["global_agencia"];
+// $cod_ciudad=$_COOKIE["global_agencia"];
+$sql="SELECT a.cod_ciudad from salida_almacenes s join almacenes a on s.cod_almacen=a.cod_almacen where s.cod_salida_almacenes='$codigoVenta'";
+// echo $sql;
+$respq=mysqli_query($enlaceCon,$sql);
+$cod_ciudad=mysqli_result($respq,0,0);
 
 //OBTENEMOS EL LOGO Y EL NOMBRE DEL SISTEMA
 $logoEnvioEmail=obtenerValorConfiguracion($enlaceCon,13);
