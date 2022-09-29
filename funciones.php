@@ -543,11 +543,16 @@ function obtenerEstadoSalida($codSalida){
   	return $estado;
 	}
 
-  function guardarPDFArqueoCajaVerticalFactura($nom,$html,$rutaGuardado,$codSalida){
+  function guardarPDFArqueoCajaVerticalFactura($nom,$html,$rutaGuardado,$codSalida,$sw=false){
     //aumentamos la memoria  
     ini_set("memory_limit", "128M");
     // Cargamos DOMPDF
-    require_once 'assets/libraries/dompdf/dompdf_config.inc.php';
+    if($sw){
+    	require_once '../assets/libraries/dompdf/dompdf_config.inc.php';	
+    }else{
+    	require_once 'assets/libraries/dompdf/dompdf_config.inc.php';	
+    }
+    
     $mydompdf = new DOMPDF();
     $mydompdf->set_paper('letter', 'portrait');    
 

@@ -17,9 +17,13 @@ $respDatosVenta=mysqli_query($enlaceCon,$sqlDatosVenta);
 $cuf="";
 while($datDatosVenta=mysqli_fetch_array($respDatosVenta)){
     $cuf=$datDatosVenta['siat_cuf'];
-
 }
-$nombreFile="siat_folder/Siat/temp/Facturas-XML/$cuf.xml";
+if(isset($sw_correo)){
+	$nombreFile="../siat_folder/Siat/temp/Facturas-XML/$cuf.xml";
+}else{
+	$nombreFile="siat_folder/Siat/temp/Facturas-XML/$cuf.xml";	
+}
+
 unlink($nombreFile);	
 $archivo = fopen($nombreFile,'a');    
 fputs($archivo,$facturaImpuestos);

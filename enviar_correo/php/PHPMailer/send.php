@@ -111,18 +111,22 @@ function sendemailFiles($mail_username,$mail_userpassword,$mail_setFromEmail,$ma
 	    require_once 'PHPMailer/src/PHPMailer.php';
 	    require_once 'PHPMailer/src/SMTP.php';
 	}   
-	if($variablex==1){
-		require_once 'funciones.php';	
-		require_once 'config.php';
+
+	if($variablex==1){	
+		require_once '../funciones.php';	
+		require_once '../config.php';
 		// require_once 'conexionmysqli.inc';
 		$enlaceCon=$conn;
-		$add_url="";
+		$add_url="../";
+		// echo "aqui1";
 	}else{
+		// echo "aqui2";
 		require_once '../../funciones.php';	
 		require_once '../../conexionmysqli.inc';
 		require_once '../../config.php';
 		$add_url="../../";
 	}
+	// echo "llega hasta aqui";
 	$logoEnvioEmail=obtenerValorConfiguracion($enlaceCon,13);
 	$mail_setFromName=obtenerValorConfiguracion($enlaceCon,12);
 

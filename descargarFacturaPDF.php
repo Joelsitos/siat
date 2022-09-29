@@ -16,13 +16,19 @@ $cuf="";
 while($datDatosVenta=mysqli_fetch_array($respDatosVenta)){
     $cuf=$datDatosVenta['siat_cuf'];
 }
-$nombreFile="siat_folder/Siat/temp/Facturas-XML/$cuf.pdf";
+if(isset($sw_correo)){
+    $sw=true;
+    $nombreFile="../siat_folder/Siat/temp/Facturas-XML/$cuf.pdf";
+}else{
+    $sw=false;
+    $nombreFile="siat_folder/Siat/temp/Facturas-XML/$cuf.pdf";  
+}
 unlink($nombreFile);	
 // echo $html;
-guardarPDFArqueoCajaVerticalFactura($cuf,$html,$nombreFile,$codigoVenta);
- // descargarPDFFacturasCopiaCliente($cuf,$html,$codigoVenta,$nombreFile);
-
-
+guardarPDFArqueoCajaVerticalFactura($cuf,$html,$nombreFile,$codigoVenta,$sw);
+if(isset($sw_correo)){
+	
+}else{
 if(isset($_GET["ds"])){
     ?><script type="text/javascript">
         var link = document.createElement('a');
@@ -32,7 +38,7 @@ if(isset($_GET["ds"])){
 }else{
     echo $cuf.".pdf";
 }
-
+}
 
 
 
