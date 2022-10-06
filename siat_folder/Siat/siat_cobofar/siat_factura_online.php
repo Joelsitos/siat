@@ -95,10 +95,12 @@ class FacturaOnline
 			$detalle->actividadEconomica	= $dataFact['siat_codigoActividad'];
 			$detalle->codigoProducto		= $codInterno;
 			$detalle->codigoProductoSin		= $dataFact['siat_codigoProducto'];
+			$detalle->unidadMedida			= $dataFact['siat_unidadMedida'];
 			$detalle->descripcion			= $nombreMat;
 			$detalle->precioUnitario		= $precioUnitFactura;
 			$detalle->montoDescuento		= $descUnit;
 			$detalle->subTotal				= $montoUnitProd;
+
 			$subTotal += $detalle->subTotal;
 			$factura->detalle[$filaIndice] = $detalle;
 			$filaIndice++;
@@ -182,7 +184,7 @@ class FacturaOnline
 			(select codigoClasificador from siat_tipos_pago where cod_tipopago=s.cod_tipopago)codigoMetodoPago,
 			s.monto_total as monto_referencial,
 			s.descuento,s.siat_usuario as usuario,s.siat_fechaemision,s.siat_complemento,s.siat_codigoRecepcion,s.siat_cuf,(select nro_tarjeta from tarjetas_salidas where cod_salida_almacen=s.cod_salida_almacenes limit 1)as nro_tarjeta,(select descripcionLeyenda from siat_sincronizarlistaleyendasfactura where codigo=s.siat_cod_leyenda) as leyenda,
-			(select siat_cafc from dosificaciones d where d.cod_dosificacion=s.cod_dosificacion and d.tipo_dosificacion=2 and d.tipo_descargo=2)as cafc,c.siat_codigoActividad,c.siat_codigoProducto,s.siat_nombreEstudiante,s.siat_periodoFacturado
+			(select siat_cafc from dosificaciones d where d.cod_dosificacion=s.cod_dosificacion and d.tipo_dosificacion=2 and d.tipo_descargo=2)as cafc,c.siat_codigoActividad,c.siat_codigoProducto,s.siat_nombreEstudiante,s.siat_periodoFacturado,c.siat_unidadMedida
 			 from salida_almacenes s join almacenes a on a.cod_almacen=s.cod_almacen
 			join ciudades c on c.cod_ciudad=a.cod_ciudad
 			where s.cod_salida_almacenes=$codSalidaFactura;";
