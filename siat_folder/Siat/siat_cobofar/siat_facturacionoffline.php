@@ -114,8 +114,11 @@ class FacturacionOffLine
 			$facturas = [];
 			$ii = 0;
 			$sqlUpdateFacturas="";
-			$sql="SELECT s.cod_salida_almacenes,(select siat_cafc from dosificaciones d where d.cod_dosificacion=s.cod_dosificacion and d.tipo_dosificacion=2 and d.tipo_descargo=2)as cafc,s.cod_tipo_doc
-			    FROM salida_almacenes s 
+			// $sql="SELECT s.cod_salida_almacenes,(select siat_cafc from dosificaciones d where d.cod_dosificacion=s.cod_dosificacion and d.tipo_dosificacion=2 and d.tipo_descargo=2)as cafc,s.cod_tipo_doc
+			//     FROM salida_almacenes s 
+			//     WHERE s.cod_salida_almacenes in ($string_codigos) and s.cod_almacen=$cod_almacen and DATE_FORMAT(s.siat_fechaemision,'%Y-%m-%d') = '$fecha'";
+			$sql="SELECT s.cod_salida_almacenes,(select siat_cafc from dosificaciones d where d.cod_dosificacion=s.cod_dosificacion and d.tipo_dosificacion=2 and d.tipo_descargo=2)as cafc,s.cod_tipo_doc,a.cod_ciudad
+			    FROM salida_almacenes s join almacenes a on s.cod_almacen=a.cod_almacen
 			    WHERE s.cod_salida_almacenes in ($string_codigos) and s.cod_almacen=$cod_almacen and DATE_FORMAT(s.siat_fechaemision,'%Y-%m-%d') = '$fecha'";
 			    //echo  $sql;
 		    $valor=0;		    
@@ -129,6 +132,7 @@ class FacturacionOffLine
 		    $cafc=null;
 		    while($row=mysqli_fetch_array($resp)){ 
 		      	$cod_salida_almacenes=$row['cod_salida_almacenes'];
+		      	$cod_ciudad=$row['cod_ciudad'];
 		      	$cafc=$row['cafc'];
 				$factura=$facturax::testRecepcionFacturaElectronica($cod_salida_almacenes,2,false,1,$nuevo_cuf);
 				if($cafc<>null&&$row['cod_tipo_doc']==4){
@@ -169,7 +173,7 @@ class FacturacionOffLine
 								$resp2=mysqli_query($enlaceCon,$sql_up);//actualizamos factura;
 								$datos_factura=explode('where cod_salida_almacenes=', $sql_up);
 								$cod_venta=$datos_factura[1];
-								$respFac=$facturaVerif::verificarEstadoFactura($cod_venta);
+								$respFac=$facturaVerif::verificarEstadoFactura($cod_venta,$cod_ciudad);
 
 								//si existe error en validacion
 								if(isset($respFac->RespuestaServicioFacturacion->codigoEstado)){

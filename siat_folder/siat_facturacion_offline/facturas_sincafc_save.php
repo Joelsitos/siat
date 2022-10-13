@@ -170,8 +170,9 @@ require("../funciones_siat.php");
       }else{
         
         if($nuevo_cufd==1){
-            deshabilitarCufd($cod_ciudad,$cuis,$fecha_X);
-            $cufdNuevo=generarCufd($cod_ciudad,$cod_impuestos,$codigoPuntoVenta);
+            $cod_entidad=2;
+            deshabilitarCufd($cod_ciudad,$cuis,$fecha_X,$cod_entidad);
+            $cufdNuevo=generarCufd($cod_ciudad,$cod_impuestos,$codigoPuntoVenta,$cod_entidad);
             $cufd=obtenerCufd_Vigente_BD($cod_ciudad,$fecha_X,$cuis);
           }
         
