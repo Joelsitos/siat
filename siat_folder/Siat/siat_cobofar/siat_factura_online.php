@@ -372,12 +372,15 @@ class FacturaOnline
 
 	}
 
-	public static function verificarNitCliente($nitCliente){
+	public static function verificarNitCliente($nitCliente,$global_agencia=null){
 		try
 		{
 			//datosCompletosFactura
-			require dirname(__DIR__). SB_DS ."../../conexionmysqli2.php";			
-			$global_agencia=$_COOKIE["global_agencia"];
+			require dirname(__DIR__). SB_DS ."../../conexionmysqli2.php";						
+
+			if($global_agencia==null){
+				$global_agencia=$_COOKIE["global_agencia"];
+			}
 			$consulta="SELECT s.cuis,c.cod_impuestos from siat_cuis s join ciudades c on c.cod_ciudad=s.cod_ciudad where s.cod_ciudad='$global_agencia' and cod_gestion=YEAR(NOW()) and estado=1";		
 			$resp = mysqli_query($enlaceCon,$consulta);	
 			// echo $consulta;

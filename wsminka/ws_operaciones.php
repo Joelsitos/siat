@@ -116,8 +116,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {//verificamos  metodo conexion
                     "mensaje"=>"ERROR. Variables incompletas");
                 }
 
-            }
-            else{
+            }elseif($accion=="obtenerCantidadOffline"){
+                require_once '../conexionmysqli2.php';
+                $contador=generarCantidadOffline($enlaceCon);                
+                $resultado=array("estado"=>1,
+                        "mensaje"=>"Contador obtenido Correctamente.",
+                        "cont"=>$contador);
+            }else{
                 $resultado=array("estado"=>4,
                     "mensaje"=>"ERROR. No existe la Accion Solicitada.");
             }
@@ -279,4 +284,19 @@ function generarCufd_minka($cod_entidad,$nitEmpresa,$codSucursal,$enlaceCon){
     //         "mensaje"=>"No existe el CUFD Actual para la sucursal solicitada.");
     // }
   return $banderaCUFD;
+}
+
+function generarCantidadOffline($enlaceCon){    
+    $cons= "SELECT count(s.cod_salida_almacenes)as contador
+          FROM salida_almacenes s join almacenes a on s.cod_almacen=a.cod_almacen
+          WHERE s.cod_tiposalida=1001 and s.salida_anulada=0 and s.cod_tipo_doc=1
+            and s.siat_codigotipoemision=2 and s.siat_codigoRecepcion is null 
+            order by a.nombre_almacen,s.nro_correlativo";
+    // echo $cons;
+    $respCons = mysqli_query($enlaceCon,$cons);
+    $contador=0;
+    while ($datCons = mysqli_fetch_array($respCons)) {
+        $contador=$datCons[0];        
+    }  
+    return $contador;
 }
