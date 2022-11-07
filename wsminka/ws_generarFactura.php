@@ -83,14 +83,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {//verificamos  metodo conexion
                                 $NombreEstudiante=null;
 
                                 $items=$datos['items'];//recibimos array de detalle
-
                                 $datosFactura=generarFacturaSiat($sucursal,$idRecibo,$fecha,$idPersona,$monto_total,$descuento,$monto_final,$id_usuario,$usuario,$nitCliente,$nombreFactura,$NombreEstudiante,$tipoPago,$nroTarjeta,$tipoDocumento,$complementoDocumento,$periodoFacturado,$items,$correo_destino);
 
                                 $estado=$datosFactura[0];//estado
                                 $mensaje=$datosFactura[1];//mensaje
                                 $codigo_transaccion=$datosFactura[2];//codigo
                                 $nro_factura=$datosFactura[3];//nro factura
-                                                                
                                 switch ($estado) {
                                     case 0://factura online
                                         $estado_ws=1;
@@ -313,7 +311,7 @@ function generarFacturaSiat($sucursal,$idRecibo,$fecha,$idPersona,$monto_total,$
             // $nro_correlativo=$nro_factura;
             $excepcion=0;
             //verificamos existencia de nit en impuestos}       
-            $data=verificarNitClienteSiat($nitCliente);
+            $data=verificarNitClienteSiat($nitCliente,$globalSucursal);
             if(!isset($data->RespuestaVerificarNit)){
                 $siat_error_valor=0;//no es nit
             }else{

@@ -221,10 +221,10 @@ function anulacionFactura_siat($codigoPuntoVenta,$codigoSucursal,$cuis,$cufd,$cu
   return array($resFac[0],$resFac[1]);
 }
 
-function verificarNitClienteSiat($nit){
+function verificarNitClienteSiat($nit,$global_agencia=null){
   require_once "Siat/siat_cobofar/siat_factura_online.php";   
   $factura= new FacturaOnline();
-  return $factura::verificarNitCliente($nit);
+  return $factura::verificarNitCliente($nit,$global_agencia);
 }
 function verificarEstadoFactura($codVenta,$global_agencia=null){
   require_once "Siat/siat_cobofar/siat_factura_online.php";   
