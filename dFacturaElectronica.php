@@ -189,7 +189,7 @@ $estadoFacturacion=$datConf[0];
   var cad2=$("input#idtxtclave").val(); 
   var per=$("#rpt_personal").val(); 
 
-  // var rpt_tipoanulacion=$("#rpt_tipoanulacion").val(); 
+  var rpt_tipoanulacion=$("#rpt_tipoanulacion").val(); 
   // var glosa_anulacion=$("input#glosa_anulacion").val(); 
 
   var enviar_correo=$("input#enviar_correo").val();
@@ -203,7 +203,7 @@ $estadoFacturacion=$datConf[0];
         data: parametros,
         success:  function (resp) { 
             if(resp==1) {
-                location.href='anular_venta_siat.php?codigo_registro='+$("#codigo_salida").val()+'&id_caja='+per+'&enviar_correo='+enviar_correo+'&correo_destino='+correo_destino;
+                location.href='anular_venta_siat.php?codigo_registro='+$("#codigo_salida").val()+'&id_caja='+per+'&enviar_correo='+enviar_correo+'&correo_destino='+correo_destino+'&rpt_tipoanulacion='+rpt_tipoanulacion;
             }else{
                Swal.fire("Error!","El codigo que ingreso es incorrecto","error");
                $("#modalAnularFactura").modal("hide");    

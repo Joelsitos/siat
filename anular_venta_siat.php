@@ -5,11 +5,13 @@ require("siat_folder/funciones_siat.php");
 
 require("enviar_correo/php/send-email_anulacion.php");
 
-$global_almacen=$_COOKIE["global_almacen"];
+// $global_almacen=$_COOKIE["global_almacen"];
+$global_almacen=0;
 
-
+$codigo_registro=$_GET["codigo_registro"];
 $enviar_correo=$_GET["enviar_correo"];
 $correo_destino=$_GET["correo_destino"];
+$rpt_tipoanulacion=$_GET["rpt_tipoanulacion"];
 // $enviar_correo=true;
 // $correo_destino="";
 //datos de factura para anulacion siat
@@ -49,7 +51,7 @@ while($dat_verif=mysqli_fetch_array($resp_verif)){
 if($anulado==0){ //verificamos si no está anulado // 0 no anulada 1 //anulado
 	if($cufd<>"0" and $cuis<>"0"){
 		// echo "***";
-		$respEvento=anulacionFactura_siat($codigoPuntoVenta,$cod_impuestos,$cuis,$cufd,$cuf);
+		$respEvento=anulacionFactura_siat($codigoPuntoVenta,$cod_impuestos,$cuis,$cufd,$cuf,$rpt_tipoanulacion);
 		// var_dump($respEvento);
 		$mensaje=$respEvento[1];
 		// $respEvento[0]=1;

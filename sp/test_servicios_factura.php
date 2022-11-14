@@ -70,14 +70,14 @@ $parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey,
    "nroTarjeta"=>$nroTarjeta,
    "tipoDocumento"=>$tipoDocumento,
    "complementoDocumento"=>$complementoDocumento,
+   "correo"=>"bsullcamani@gmail.com",
    "items"=>$arrayDetalle
    // ,"NombreEstudiante"=>$NombreEstudiante,
    // "periodoFacturado"=>$periodoFacturado
 );  
     
-// $url="http://localhost:8080/minka_siat_ibno/wsminka/ws_generarFactura.php";
-
-$url="https://intranet.ibnorca.org:8880/siat_ibno/wsminka/ws_generarFactura.php";
+$url="http://localhost:8080/minka_siat_ibno/wsminka/ws_generarFactura.php";
+//$url="https://intranet.ibnorca.org:8880/siat_ibno/wsminka/ws_generarFactura.php";
 $jsons=callService($parametros, $url);
 	//print_r($jsons);
   

@@ -122,6 +122,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {//verificamos  metodo conexion
                 $resultado=array("estado"=>1,
                         "mensaje"=>"Contador obtenido Correctamente.",
                         "cont"=>$contador);
+            }elseif($accion=="verificarExistenciaFacturaSiat"){
+                require_once '../conexionmysqli2.php';
+                $codFacturaIbno=$datos['codFacturaIbno'];
+                $DatosConexion=VerificarExistenciaFacturaSiat($enlaceCon,$codFacturaIbno);
+                if($DatosConexion[0]){
+                    $resultado=array("estado"=>1,
+                        "mensaje"=>"Transacción Exitosa",
+                        "idTransaccion"=>$DatosConexion[1],
+                        "nroFactura"=>$DatosConexion[2]);
+                }else{
+                    $resultado=array("estado"=>0,
+                        "mensaje"=>"Factura no Generada.");
+                }
+                
             }else{
                 $resultado=array("estado"=>4,
                     "mensaje"=>"ERROR. No existe la Accion Solicitada.");
@@ -300,3 +314,20 @@ function generarCantidadOffline($enlaceCon){
     }  
     return $contador;
 }
+
+
+function VerificarExistenciaFacturaSiat($enlaceCon,$codFacturaIbno){    
+    $cons= "SELECT cod_salida_almacenes,nro_correlativo from salida_almacenes where cod_factura_ibno='$codFacturaIbno'";
+    // echo $cons;
+    $respCons = mysqli_query($enlaceCon,$cons);
+    $cod_salida_almacenes=0;
+    $nro_correlativo=0;
+    $estadoTransaccion=false;
+    while ($datCons = mysqli_fetch_array($respCons)) {
+        $cod_salida_almacenes=$datCons[0];
+        $nro_correlativo=$datCons[1];
+        $estadoTransaccion=true;
+    }  
+    return array($estadoTransaccion,$cod_salida_almacenes,$nro_correlativo);
+}
+
