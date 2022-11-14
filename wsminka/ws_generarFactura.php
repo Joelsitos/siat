@@ -1,6 +1,7 @@
 <?php
-$start_time = microtime(true);
+
 function insertarlogFacturas_entrada($json,$mensaje,$enlaceCon){
+    $start_time = microtime(true);
     // $dbh = new Conexion();    
     // $sql="INSERT INTO log_facturas(fecha,detalle_error,json) values(NOW(),'$mensaje','$json')";
     // $stmt = $dbh->prepare($sql);
@@ -15,12 +16,6 @@ function insertarlogFacturas_entrada($json,$mensaje,$enlaceCon){
 }
 
 function InsertlogFacturas_salida($cod_error,$detalle_error,$json,$enlaceCon){  
-    // $dbh = new Conexion();    
-    // $sql="INSERT INTO log_facturas(fecha,cod_error,detalle_error,json) values(NOW(),'$cod_error','$detalle_error','$json')";
-    // $stmt = $dbh->prepare($sql);
-    // $stmt->execute();
-    // require_once '../conexionmysqli2.php';
-    // print_r($json);
     $jsonString=json_encode($json);
     $fechaActualX=date('Y-m-d H:i:s');
     $sqlUpdate="INSERT INTO log_facturas(fecha,cod_error,detalle_error,json) values('$fechaActualX','$cod_error','$detalle_error','$jsonString')";
@@ -77,13 +72,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {//verificamos  metodo conexion
                                     // $correo_destino="bsullcamani@gmail.com";
                                     $correo_destino="";
                                 }
+                                if (isset($datos['codFacturaIbno'])) {
+                                    $codFacturaIbno=$datos['codFacturaIbno'];          
+                                }else{
+                                    // $correo_destino="bsullcamani@gmail.com";
+                                    $codFacturaIbno=0;
+                                }
+
+                                
                                 // $periodoFacturado=$datos['periodoFacturado'];
                                 // $NombreEstudiante=$datos['NombreEstudiante'];
                                 $periodoFacturado=null;
                                 $NombreEstudiante=null;
 
                                 $items=$datos['items'];//recibimos array de detalle
-                                $datosFactura=generarFacturaSiat($sucursal,$idRecibo,$fecha,$idPersona,$monto_total,$descuento,$monto_final,$id_usuario,$usuario,$nitCliente,$nombreFactura,$NombreEstudiante,$tipoPago,$nroTarjeta,$tipoDocumento,$complementoDocumento,$periodoFacturado,$items,$correo_destino);
+                                $datosFactura=generarFacturaSiat($sucursal,$idRecibo,$fecha,$idPersona,$monto_total,$descuento,$monto_final,$id_usuario,$usuario,$nitCliente,$nombreFactura,$NombreEstudiante,$tipoPago,$nroTarjeta,$tipoDocumento,$complementoDocumento,$periodoFacturado,$items,$correo_destino,$codFacturaIbno);
 
                                 $estado=$datosFactura[0];//estado
                                 $mensaje=$datosFactura[1];//mensaje
@@ -111,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {//verificamos  metodo conexion
                                 $mensaje="ERROR. Variables incompletas";
                                 $resultado=array("estado"=>4,
                                 "mensaje"=>$mensaje);
-                                InsertlogFacturas_salida(4,$mensaje,null,$enlaceCon);
+                                //InsertlogFacturas_salida(4,$mensaje,null,$enlaceCon);
                             }
                                                         
                         // }else{
@@ -126,18 +129,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {//verificamos  metodo conexion
                 $mensaje="ERROR. No existe la Accion Solicitada.";
                 $resultado=array("estado"=>4,
                     "mensaje"=>$mensaje);
-                InsertlogFacturas_salida(4,$mensaje,null,$enlaceCon);
+                //InsertlogFacturas_salida(4,$mensaje,null,$enlaceCon);
             }
         }else{
             $mensaje="ACCESO DENEGADO!. Credenciales Incorrectos.";
             $resultado=array("estado"=>3,"mensaje"=>$mensaje);
-            InsertlogFacturas_salida(3,$mensaje,null,$enlaceCon);
+            //InsertlogFacturas_salida(3,$mensaje,null,$enlaceCon);
         }
     }else{
         $resultado=array(
                 "estado"=>3,
                 "mensaje"=>"ACCESO DENEGADO!. Usted no tiene permiso para ver este contenido.");
     }
+    InsertlogFacturas_salida(3,"Salida Json",$resultado,$enlaceCon);
     header('Content-type: application/json');
     echo json_encode($resultado); 
 }else{
@@ -148,7 +152,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {//verificamos  metodo conexion
     echo json_encode($resultado);
 }
 
-function generarFacturaSiat($sucursal,$idRecibo,$fecha,$idPersona,$monto_total,$descuento,$monto_final,$id_usuario,$siat_usuario,$nitCliente,$nombreFactura,$NombreEstudiante,$tipoPago,$nroTarjeta,$tipoDocumento,$complementoDocumento,$periodoFacturado,$items,$correo_destino){
+function generarFacturaSiat($sucursal,$idRecibo,$fecha,$idPersona,$monto_total,$descuento,$monto_final,$id_usuario,$siat_usuario,$nitCliente,$nombreFactura,$NombreEstudiante,$tipoPago,$nroTarjeta,$tipoDocumento,$complementoDocumento,$periodoFacturado,$items,$correo_destino,$codFacturaIbno){
     // $correo_destino="bsullcamani@gmail.com";
     $start_time = microtime(true);
     require_once "../conexionmysqli2.php";
@@ -162,8 +166,7 @@ function generarFacturaSiat($sucursal,$idRecibo,$fecha,$idPersona,$monto_total,$
     
     // $globalSucursal=1;//cod ciudad //encontrar dato
     // $almacenOrigen=1000;//cod almacen
-    // $globalSucursal=$sucursal;//cod ciudad //encontrar dato    
-
+    // $globalSucursal=$sucursal;//cod ciudad //encontrar dato
     
     $datosCiudad=obtenerAlmacen($sucursal,$enlaceCon);
     $globalSucursal=$datosCiudad[0];
@@ -195,6 +198,11 @@ function generarFacturaSiat($sucursal,$idRecibo,$fecha,$idPersona,$monto_total,$
     if((int)$nitCliente==123){
         $razonSocial="SN";
     }
+    /*VALIDACION MANUAL CASOS ESPECIALES IMPUESTOS*/
+    if((int)$nitCliente=='99001' || (int)$nitCliente=='99002' || (int)$nitCliente=='99003'){
+        $siat_codigotipodocumentoidentidad=5;//nit
+    }
+
     $fecha_emision_manual="";
 
     $tipoVenta=$tipoPago;
@@ -255,10 +263,7 @@ function generarFacturaSiat($sucursal,$idRecibo,$fecha,$idPersona,$monto_total,$
         // $siat_codigotipodocumentoidentidad=$_POST["tipo_documento"]; 
         $siat_codigotipodocumentoidentidad=$tipoDocumento;
     }
-    /*VALIDACION MANUAL CASOS ESPECIALES*/
-    if((int)$nitCliente=='99001' || (int)$nitCliente=='99002' || (int)$nitCliente=='99003'){
-        $siat_codigotipodocumentoidentidad=5;//nit
-    }
+    
 
     $created_by=$usuarioVendedor;
     $contador = 0;
@@ -339,10 +344,10 @@ function generarFacturaSiat($sucursal,$idRecibo,$fecha,$idPersona,$monto_total,$
                 `almacen_destino`, `observaciones`, `estado_salida`, `nro_correlativo`, `salida_anulada`, 
                 `cod_cliente`, `monto_total`, `descuento`, `monto_final`, razon_social, nit, cod_chofer, cod_vehiculo, monto_cancelado, cod_dosificacion, monto_efectivo,
                 monto_cambio,cod_tipopago,created_by,created_at,cod_tipopreciogeneral,cod_tipoventa2,monto_cancelado_bs,monto_cancelado_usd,tipo_cambio,cod_delivery,
-                siat_cuis,siat_cuf,siat_codigotipodocumentoidentidad,siat_complemento,siat_codigoPuntoVenta,siat_excepcion,siat_codigocufd,siat_cod_leyenda,siat_nombreEstudiante,siat_periodoFacturado,siat_usuario)
+                siat_cuis,siat_cuf,siat_codigotipodocumentoidentidad,siat_complemento,siat_codigoPuntoVenta,siat_excepcion,siat_codigocufd,siat_cod_leyenda,siat_nombreEstudiante,siat_periodoFacturado,siat_usuario,cod_factura_ibno)
                 values ('$codigo', '$almacenOrigen', '$tipoSalida', '$tipoDoc', '$fecha', '$hora', '0', '$almacenDestino', 
                 '$observaciones', '1', '$nro_correlativo', 0, '$codCliente', '$totalVenta', '$descuentoVenta', '$totalFinal', '$razonSocial', 
-                '$nitCliente', '$usuarioVendedor', '$vehiculo',0,'$cod_dosificacion','$totalEfectivo','$totalCambio','$tipoVenta','$created_by','$created_at','$cod_tipopreciogeneral','$cod_tipoVenta2','$monto_bs','$monto_usd','$tipo_cambio','$cod_tipodelivery','$cuis','$cuf','$siat_codigotipodocumentoidentidad','$complemento','$codigoPuntoVenta',$excepcion,'$codigoCufd','$cod_leyenda','$NombreEstudiante','$periodoFacturado','$siat_usuario')";         
+                '$nitCliente', '$usuarioVendedor', '$vehiculo',0,'$cod_dosificacion','$totalEfectivo','$totalCambio','$tipoVenta','$created_by','$created_at','$cod_tipopreciogeneral','$cod_tipoVenta2','$monto_bs','$monto_usd','$tipo_cambio','$cod_tipodelivery','$cuis','$cuf','$siat_codigotipodocumentoidentidad','$complemento','$codigoPuntoVenta',$excepcion,'$codigoCufd','$cod_leyenda','$NombreEstudiante','$periodoFacturado','$siat_usuario','$codFacturaIbno')";         
             $sql_inserta=mysqli_query($enlaceCon,$sql_insert);
         // }
         $contador++;
@@ -433,7 +438,7 @@ function generarFacturaSiat($sucursal,$idRecibo,$fecha,$idPersona,$monto_total,$
                     $mensaje="Factura emitida fuera de línea :(";               
                     $url="location.href='dFacturaElectronica.php?codigo_salida=$codigo';";
                 }
-                InsertlogFacturas_salida($estado_facturado,$mensaje,$json,$enlaceCon);
+                InsertlogFacturas_salida($estado_facturado,"Resp.SIAT",$json,$enlaceCon);
                 //SACAMOS LA VARIABLE PARA ENVIAR EL CORREO O NO SI ES 1 ENVIAMOS CORREO DESPUES DE LA TRANSACCION
                  $banderaCorreo=obtenerValorConfiguracion($enlaceCon,10);
                 // $banderaCorreo=1;
@@ -502,7 +507,7 @@ function generarFacturaSiat($sucursal,$idRecibo,$fecha,$idPersona,$monto_total,$
 
         $mensaje="Ocurrio un error en la transaccion. Contacte con el administrador del sistema";
         $estado_facturado=2;//error
-        InsertlogFacturas_salida($estado_facturado,$mensaje,null,$enlaceCon);
+        //InsertlogFacturas_salida($estado_facturado,$mensaje,null,$enlaceCon);
         return array($estado_facturado,$mensaje,$codigo,$nro_correlativo);
     }   
 }

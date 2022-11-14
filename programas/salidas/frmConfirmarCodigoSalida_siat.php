@@ -54,7 +54,26 @@ $fechaAnulacion=date("Y-m-d");
     <tr><td class="bg-danger text-white">Clave:</td><td colspan="2"><input type="password" id="idtxtclave" value="" class="form-control" style="background: #A5F9EA;" autocomplete="off"></td></tr>
     <tr><td class="bg-danger text-white">Fecha:</td><td colspan="2"><input type="date" id="idtxtfecha" value="<?=$fechaAnulacion?>" class="form-control" readonly></td></tr>
     
-   
+    <tr><td class="bg-danger text-white">Tipo Anulación</td><td >
+      <?php
+      echo "<select name='rpt_tipoanulacion' id='rpt_tipoanulacion' class='selectpicker' data-live-search='true'  data-style='btn btn-rose'>"; 
+
+      echo "<option value='3' >DATOS DE EMISION INCORRECTOS</option>";  
+      echo "<option value='1' >FACTURA MAL EMITIDA</option>";
+      echo "<option value='2' >NOTA DE CREDITO-DEBITO MAL EMITIDA</option>";
+      echo "<option value='4' >FACTURA O NOTA DE CREDITO-DEBITO DEVUELTA</option>";  
+
+    //   $sql="SELECT codigoClasificador,descripcion from siat_sincronizarparametricamotivoanulacion  order by descripcion";
+    // $respAnulacion=mysqli_query($enlaceCon,$sql);    
+    // while ($datAnulacion = mysqli_fetch_array($respAnulacion)) {
+    //     $codigo=$datAnulacion['codigoClasificador'];
+    //     $nombre=$datAnulacion['descripcion'];
+    //     echo "<option value='$codigo' >$nombre</option>";  
+    //   } 
+      ?>
+    </td>
+  </tr>
+
   <tr><td class="bg-info text-white">Enviar Correo &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="enviar_correo" name="enviar_correo" type='checkbox' style="background: #white;"></td>
     <td colspan="2"><input type="text" name="correo_destino" id="correo_destino" value="<?=$correo_destino?>" class="form-control" style="background: #white;"></td>
   </tr>
