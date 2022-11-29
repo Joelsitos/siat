@@ -125,6 +125,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {//verificamos  metodo conexion
                     //     $resultado=array("estado"=>4,
                     //     "mensaje"=>"ERROR. Variables incompletas");
                     // }
+            }elseif($accion=="obtenerFacturaBase64Siat"){
+                $codFacturaIbno=$datos['codFacturaIbno'];
+                $codigoVenta=obtenerDatosFactura($codFacturaIbno,$enlaceCon);
+                if($codigoVenta>0){
+                    require_once "../formatoFacturaOnLine_funcion.php";
+                    $html=formatofacturaSIAT($codigoVenta);
+                    $factura = formatoFacturabase64($html); 
+                    $resultado=array(
+                            "estado"=>1,
+                            "mensaje"=>"Factura Obtenida Correctamente", 
+                            "factura64"=>$factura['base64'], 
+                            "totalComponentes"=>1     
+                            );
+                }else{
+                    $resultado=array(
+                            "estado"=>2,
+                            "mensaje"=>"Codigo Venta no encontrado", 
+                            "factura64"=>"", 
+                            "totalComponentes"=>1     
+                            );
+                }
+                
+
             }else{
                 $mensaje="ERROR. No existe la Accion Solicitada.";
                 $resultado=array("estado"=>4,
@@ -530,4 +553,15 @@ function obtenerAlmacen($cod_ciudad_externo,$enlaceCon){
         $cod_entidad=$dat['cod_entidad'];
     }
     return array($cod_ciudad,$cod_almacen,$cod_impuestos,$cod_entidad);
+}
+
+function obtenerDatosFactura($cod_factura_ibno,$enlaceCon){
+    //require("conexionmysqli2.php");
+    $sql="SELECT cod_salida_almacenes from salida_almacenes where cod_factura_ibno=$cod_factura_ibno";
+    $resp=mysqli_query($enlaceCon,$sql);    
+    $cod_salida_almacenes=0;
+    while ($dat = mysqli_fetch_array($resp)) {
+        $cod_salida_almacenes=$dat['cod_salida_almacenes'];
+    }
+    return $cod_salida_almacenes;
 }
