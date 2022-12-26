@@ -40,7 +40,7 @@ $complementoDocumento="";
 
 
   //Lista de Tipos documento
-$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, 
+/*$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, 
    "accion"=>"generarFacturaMinka", //
    "sucursalId"=>$sucursal,   
    "fechaFactura"=>$fecha,
@@ -60,9 +60,42 @@ $parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey,
    // ,"NombreEstudiante"=>$NombreEstudiante,
    // "periodoFacturado"=>$periodoFacturado
 );  
-    
+ */   
 //$url="http://localhost:8090/minka_siat_ibno/wsminka/ws_generarFactura.php";
-$url="https://intranet.ibnorca.org:8880/siat_ibno/wsminka/ws_generarFactura.php";
+//$url="https://intranet.ibnorca.org:8880/siat_ibno/wsminka/ws_generarFactura.php";
+$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, 
+   "accion"=>"generarFacturaMinka", //
+   // "idEmpresa"=>2, //ID de empresa, otorgado por minkasoftware
+   // "nitEmpresa"=>'10916889016', //Nit de empresa
+   "sucursal"=>$sucursal,   
+   "idRecibo"=>$idRecibo,
+   "fecha"=>$fecha,
+   "idPersona"=>$idPersona,
+   "monto_total"=>$monto_total,
+   "descuento"=>$descuento,
+   "monto_final"=>$monto_final,
+   "id_usuario"=>$id_usuario,//***
+   "usuario"=>$usuario,//***
+   "nitCliente"=>$nitCliente,
+   "nombreFactura"=>$nombreFactura,   
+   "tipoPago"=>$tipoPago,
+   "nroTarjeta"=>$nroTarjeta,
+   "tipoDocumento"=>$tipoDocumento,
+   "complementoDocumento"=>$complementoDocumento,
+   "correo"=>"bsullcamani@gmail.com",
+   "items"=>$arrayDetalle
+   // ,"NombreEstudiante"=>$NombreEstudiante,
+   // "periodoFacturado"=>$periodoFacturado
+);  
+    
+//formato base 64 factura
+
+$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, 
+           "accion"=>"obtenerFacturaBase64Siat",
+           "codFacturaIbno"=>31579
+       ); 
+$url="http://localhost:8090/minka_siat_ibno/wsminka/ws_generarFactura.php";
+//$url="https://intranet.ibnorca.org:8880/siat_ibno/wsminka/ws_generarFactura.php";
 $jsons=callService($parametros, $url);
 	//print_r($jsons);
   
