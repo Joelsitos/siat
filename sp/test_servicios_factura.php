@@ -11,25 +11,16 @@ $sKey = "rrf656nb2396k6g6x44434h56jzx5g6";
 
 $Objeto_detalle1 = new stdClass();
 $Objeto_detalle1->codDetalle = 1;
-$Objeto_detalle1->cantidadUnitaria = 1;
+$Objeto_detalle1->cantidad = 1;
 $Objeto_detalle1->precioUnitario = "300";
 $Objeto_detalle1->descuentoProducto = 0;
 // $Objeto_detalle1->monto_final = "34.8";
-$Objeto_detalle1->conceptoProducto = "PAGO DE CANCHA,DEL 1 AL 3 DEL MES";  
+$Objeto_detalle1->detalle = "COMPRA DE NORMA 9001";  
 
-$Objeto_detalle4 = new stdClass();
-$Objeto_detalle4->codDetalle = 1;
-$Objeto_detalle4->cantidadUnitaria = 1;
-$Objeto_detalle4->precioUnitario = "300";
-$Objeto_detalle4->descuentoProducto = 0;
-// $Objeto_detalle4->monto_final = "34.8";
-$Objeto_detalle4->conceptoProducto = "PAGO DE CANCHA,DEL 1 AL 3 DEL MES";
-$arrayDetalle= array($Objeto_detalle1,$Objeto_detalle4);
+$arrayDetalle= array($Objeto_detalle1);
 
 $sucursal="1";
-// $tipoTabla="1";//cod_producto
-$idRecibo="28644";
-$fecha="2022-11-05";
+$fecha="2022-12-23";
 $idPersona="-28644";
 $idPlan="36";
 $cuota="9";
@@ -39,13 +30,11 @@ $monto_final=$monto_total-$descuento;
 $gestion="2022";
 $id_usuario="1000";
 $usuario="ester guardia";
-$nitCliente=4868422;
-$nombreFactura="CRISTIANO RONALDO";
-// $NombreEstudiante="CRISTIANO RONALDO";
-// $Concepto="PAGO DE CANCHA,DEL 1 AL 3 DEL MES";
+$nitCliente=4868422016;
+$nombreFactura="LUNA GONZALES";
 $tipoPago="1";
 $nroTarjeta=0;
-$tipoDocumento="1";
+$tipoDocumento="5";
 $complementoDocumento="";
 // $periodoFacturado="JULIO-2022";
 
@@ -53,31 +42,27 @@ $complementoDocumento="";
   //Lista de Tipos documento
 $parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, 
    "accion"=>"generarFacturaMinka", //
-   // "idEmpresa"=>2, //ID de empresa, otorgado por minkasoftware
-   // "nitEmpresa"=>'10916889016', //Nit de empresa
-   "sucursal"=>$sucursal,   
-   "idRecibo"=>$idRecibo,
-   "fecha"=>$fecha,
-   "idPersona"=>$idPersona,
-   "monto_total"=>$monto_total,
+   "sucursalId"=>$sucursal,   
+   "fechaFactura"=>$fecha,
+   "importeTotal"=>$monto_total,
    "descuento"=>$descuento,
-   "monto_final"=>$monto_final,
+   "importeFinal"=>$monto_final,
    "id_usuario"=>$id_usuario,//***
    "usuario"=>$usuario,//***
-   "nitCliente"=>$nitCliente,
-   "nombreFactura"=>$nombreFactura,   
+   "nitciCliente"=>$nitCliente,
+   "razonSocial"=>$nombreFactura,   
    "tipoPago"=>$tipoPago,
    "nroTarjeta"=>$nroTarjeta,
-   "tipoDocumento"=>$tipoDocumento,
-   "complementoDocumento"=>$complementoDocumento,
-   "correo"=>"bsullcamani@gmail.com",
+   "idIdentificacion"=>$tipoDocumento,
+   "complementoCiCliente"=>$complementoDocumento,
+   "CorreoCliente"=>"lunagonzalesmarco@gmail.com",
    "items"=>$arrayDetalle
    // ,"NombreEstudiante"=>$NombreEstudiante,
    // "periodoFacturado"=>$periodoFacturado
 );  
     
-$url="http://localhost:8080/minka_siat_ibno/wsminka/ws_generarFactura.php";
-//$url="https://intranet.ibnorca.org:8880/siat_ibno/wsminka/ws_generarFactura.php";
+//$url="http://localhost:8090/minka_siat_ibno/wsminka/ws_generarFactura.php";
+$url="https://intranet.ibnorca.org:8880/siat_ibno/wsminka/ws_generarFactura.php";
 $jsons=callService($parametros, $url);
 	//print_r($jsons);
   

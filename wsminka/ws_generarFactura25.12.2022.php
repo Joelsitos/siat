@@ -46,27 +46,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {//verificamos  metodo conexion
                         // $nitEmpresa=$datos['nitEmpresa'];//
                         // if(verificarExistenciaEmpresa($idEmpresa,$nitEmpresa,$enlaceCon)){
 
-                            if(isset($datos['sucursalId']) && isset($datos['fechaFactura']) && isset($datos['idPersona']) && isset($datos['id_usuario']) && isset($datos['usuario']) && isset($datos['nitCliente']) && isset($datos['nombreFactura']) && isset($datos['tipoPago']) && isset($datos['tipoDocumento']) && isset($datos['complementoDocumento']) && isset($datos['items']) && isset($datos['monto_total']) && isset($datos['descuento']) && isset($datos['monto_final'])){ // && isset($datos['periodoFacturado']) && isset($datos['NombreEstudiante'])
+                            if(isset($datos['sucursalId']) && isset($datos['fechaFactura'])  && isset($datos['id_usuario']) && isset($datos['usuario']) && isset($datos['nitciCliente']) && isset($datos['razonSocial']) && isset($datos['tipoPago']) && isset($datos['idIdentificacion']) && isset($datos['complementoCiCliente']) && isset($datos['items']) && isset($datos['importeTotal']) && isset($datos['descuento']) && isset($datos['importeFinal'])){ 
+
                                 $sucursal=$datos['sucursalId'];
                                 // $tipoTabla=$datos['tipoTabla'];
                                 $fecha=$datos['fechaFactura'];
-                                $idPersona=$datos['idPersona'];
+                                $idPersona=$datos['id_usuario'];
                                 
-                                $monto_total=$datos['monto_total'];
+                                $monto_total=$datos['importeTotal'];
                                 $descuento=$datos['descuento'];
-                                $monto_final=$datos['monto_final'];
+                                $monto_final=$datos['importeFinal'];
 
                                 $id_usuario=$datos['id_usuario'];
                                 $usuario=$datos['usuario'];
-                                $nitCliente=$datos['nitCliente'];
-                                $nombreFactura=$datos['nombreFactura'];
+                                $nitCliente=$datos['nitciCliente'];
+                                $nombreFactura=$datos['razonSocial'];
                                 // $Concepto=$datos['Concepto'];
                                 $tipoPago=$datos['tipoPago'];
                                 $nroTarjeta=$datos['nroTarjeta'];
-                                $tipoDocumento=$datos['tipoDocumento'];
-                                $complementoDocumento=$datos['complementoDocumento'];
-                                if (isset($datos['correo'])) {
-                                    $correo_destino=$datos['correo'];          
+                                $tipoDocumento=$datos['idIdentificacion'];
+                                $complementoDocumento=$datos['complementoCiCliente'];
+                                if (isset($datos['CorreoCliente'])) {
+                                    $correo_destino=$datos['CorreoCliente'];          
                                 }else{
                                     // $correo_destino="bsullcamani@gmail.com";
                                     $correo_destino="";
@@ -376,12 +377,13 @@ function generarFacturaSiat($sucursal,$idRecibo,$fecha,$idPersona,$monto_total,$
         // print_r($items);
         $i=1;
         foreach ($items as $valor) {
-            // echo $codDetalle;
-            $codDetalle=$valor['codDetalle'];
-            $cantidadUnitaria=$valor['cantidadUnitaria'];
+            
+            //$codDetalle=$valor['codDetalle'];
+            $codDetalle=$i;
+            $cantidadUnitaria=$valor['cantidad'];
             $precioUnitario=$valor['precioUnitario'];
             $descuentoProducto=$valor['descuentoProducto'];
-            $conceptoProducto=$valor['conceptoProducto'];            
+            $conceptoProducto=$valor['detalle'];            
             //SE DEBE CALCULAR EL MONTO DEL MATERIAL POR CADA UNO PRECIO*CANTIDAD - EL DESCUENTO ES UN DATO ADICIONAL
             $montoMaterial=$precioUnitario*$cantidadUnitaria;
             // $montoMaterialConDescuento=($precioUnitario*$cantidadUnitaria)-$descuentoProducto;

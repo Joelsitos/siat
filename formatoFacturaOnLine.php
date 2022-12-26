@@ -531,7 +531,7 @@ border-bottom: 1px solid #000;
                 </td>
                 
                 <td >
-                    <div style="width:100%;text-align: left;font-size: 14px"><p><b>FACTURA</b><br><small><small>(Con Derecho a Crédito Fiscal)</small></small></p></div><br>
+                    <div style="width:100%;text-align:center ;font-size: 14px"><p><b>FACTURA</b><br><small><small>(Con Derecho a Crédito Fiscal)</small></small></p></div><br>
                     <table style="width: 100%;border: black 1px solid;text-align: left;">
                         
                         <tr align="left">
@@ -579,7 +579,7 @@ border-bottom: 1px solid #000;
         <table class="table2">
             <tr>
                 <td width="8%" class="text-center">Codigo Producto /<br>Servicio</td>
-                <td width="40%" class="text-center">DESCRIPCIÓN</td>
+                <td width="40%" class="text-center">Descripción</td>
                 <td width="8%" class="text-center">Unidad Medida</td>
                 <td width="8%" class="text-center">Cantidad</td>
                 <td class="text-center">Precio Unitario</td>
