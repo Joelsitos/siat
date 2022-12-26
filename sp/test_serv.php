@@ -15,11 +15,11 @@ $sKey = "rrf656nb2396k6g6x44434h56jzx5g6";
   //         );
 
   //Lista de Tipos documento
-	// $parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, 
- //           "accion"=>"sincronizarParametricaTipoDocumentoIdentidad", //
- //           "idEmpresa"=>2, //ID de empresa, otorgado por minkasoftware
- //           "nitEmpresa"=>'10916889016' //nit  de empresa
- //       );  
+	$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, 
+           "accion"=>"sincronizarParametricaTipoDocumentoIdentidad", //
+           "idEmpresa"=>2, //ID de empresa, otorgado por minkasoftware
+           "nitEmpresa"=>'1020745020' //nit  de empresa
+       );  
 
 
 //VERIFICACION CUFD
@@ -31,14 +31,17 @@ $sKey = "rrf656nb2396k6g6x44434h56jzx5g6";
 //    );  
 
 //Obtener Cufd
-$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, 
-            "accion"=>"obtenerCufdMinka", //Nuevo contacto de empresa
-            "idEmpresa"=>2, //ID de empresa, otorgado por minkasoftware
-            "nitEmpresa"=>'10916889016', //nit  de empresa
-            "codSucursal"=>'1' //codigo de agencia
-          );
+// $parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, 
+//             "accion"=>"obtenerCufdMinka", //Nuevo contacto de empresa
+//             "idEmpresa"=>2, //ID de empresa, otorgado por minkasoftware
+//             "nitEmpresa"=>'10916889016', //nit  de empresa
+//             "codSucursal"=>'1' //codigo de agencia
+//           );
     
-	$url="http://localhost:8080/minka_siat/wsminka/ws_operaciones.php";
+
+
+	//$url="http://localhost:8090/minka_siat_ibno/wsminka/ws_operaciones.php";
+  $url="http://www.minkasoftware.com/siat_ibno/wsminka/ws_operaciones.php";
 	$jsons=callService($parametros, $url);
   $obj=json_decode($jsons);//decodificando json
   header('Content-type: application/json');  
@@ -47,7 +50,7 @@ $parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey,
 
 
 
-  /*if(isset($obj->estado))
+/*  if(isset($obj->estado))
     $estadoX=$obj->estado;
   else $estadoX=0;
   if(isset($obj->mensaje))

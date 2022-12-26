@@ -46,27 +46,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {//verificamos  metodo conexion
                         // $nitEmpresa=$datos['nitEmpresa'];//
                         // if(verificarExistenciaEmpresa($idEmpresa,$nitEmpresa,$enlaceCon)){
 
-                            if(isset($datos['sucursal']) && isset($datos['fecha']) && isset($datos['idPersona']) && isset($datos['id_usuario']) && isset($datos['usuario']) && isset($datos['nitCliente']) && isset($datos['nombreFactura']) && isset($datos['tipoPago']) && isset($datos['tipoDocumento']) && isset($datos['complementoDocumento']) && isset($datos['items']) && isset($datos['monto_total']) && isset($datos['descuento']) && isset($datos['monto_final'])){ // && isset($datos['periodoFacturado']) && isset($datos['NombreEstudiante'])
-                                $sucursal=$datos['sucursal'];
+                            if(isset($datos['sucursalId']) && isset($datos['fechaFactura'])  && isset($datos['id_usuario']) && isset($datos['usuario']) && isset($datos['nitciCliente']) && isset($datos['razonSocial']) && isset($datos['tipoPago']) && isset($datos['idIdentificacion']) && isset($datos['complementoCiCliente']) && isset($datos['items']) && isset($datos['importeTotal']) && isset($datos['descuento']) && isset($datos['importeFinal'])){ 
+
+                                $sucursal=$datos['sucursalId'];
                                 // $tipoTabla=$datos['tipoTabla'];
-                                $fecha=$datos['fecha'];
-                                $idPersona=$datos['idPersona'];
+                                $fecha=$datos['fechaFactura'];
+                                $idPersona=$datos['id_usuario'];
                                 
-                                $monto_total=$datos['monto_total'];
+                                $monto_total=$datos['importeTotal'];
                                 $descuento=$datos['descuento'];
-                                $monto_final=$datos['monto_final'];
+                                $monto_final=$datos['importeFinal'];
 
                                 $id_usuario=$datos['id_usuario'];
                                 $usuario=$datos['usuario'];
-                                $nitCliente=$datos['nitCliente'];
-                                $nombreFactura=$datos['nombreFactura'];
+                                $nitCliente=$datos['nitciCliente'];
+                                $nombreFactura=$datos['razonSocial'];
                                 // $Concepto=$datos['Concepto'];
                                 $tipoPago=$datos['tipoPago'];
                                 $nroTarjeta=$datos['nroTarjeta'];
-                                $tipoDocumento=$datos['tipoDocumento'];
-                                $complementoDocumento=$datos['complementoDocumento'];
-                                if (isset($datos['correo'])) {
-                                    $correo_destino=$datos['correo'];          
+                                $tipoDocumento=$datos['idIdentificacion'];
+                                $complementoDocumento=$datos['complementoCiCliente'];
+                                if (isset($datos['CorreoCliente'])) {
+                                    $correo_destino=$datos['CorreoCliente'];          
                                 }else{
                                     // $correo_destino="bsullcamani@gmail.com";
                                     $correo_destino="";
@@ -124,29 +125,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {//verificamos  metodo conexion
                     //     $resultado=array("estado"=>4,
                     //     "mensaje"=>"ERROR. Variables incompletas");
                     // }
-            }elseif($accion=="obtenerFacturaBase64Siat"){
-                $codFacturaIbno=$datos['codFacturaIbno'];
-                $codigoVenta=obtenerDatosFactura($codFacturaIbno,$enlaceCon);
-                if($codigoVenta>0){
-                    require_once "../formatoFacturaOnLine_funcion.php";
-                    $html=formatofacturaSIAT($codigoVenta);
-                    $factura = formatoFacturabase64($html); 
-                    $resultado=array(
-                            "estado"=>1,
-                            "mensaje"=>"Factura Obtenida Correctamente", 
-                            "factura64"=>$factura['base64'], 
-                            "totalComponentes"=>1     
-                            );
-                }else{
-                    $resultado=array(
-                            "estado"=>2,
-                            "mensaje"=>"Codigo Venta no encontrado", 
-                            "factura64"=>"", 
-                            "totalComponentes"=>1     
-                            );
-                }
-                
-
             }else{
                 $mensaje="ERROR. No existe la Accion Solicitada.";
                 $resultado=array("estado"=>4,
@@ -399,12 +377,13 @@ function generarFacturaSiat($sucursal,$idRecibo,$fecha,$idPersona,$monto_total,$
         // print_r($items);
         $i=1;
         foreach ($items as $valor) {
-            // echo $codDetalle;
-            $codDetalle=$valor['codDetalle'];
-            $cantidadUnitaria=$valor['cantidadUnitaria'];
+            
+            //$codDetalle=$valor['codDetalle'];
+            $codDetalle=$i;
+            $cantidadUnitaria=$valor['cantidad'];
             $precioUnitario=$valor['precioUnitario'];
             $descuentoProducto=$valor['descuentoProducto'];
-            $conceptoProducto=$valor['conceptoProducto'];            
+            $conceptoProducto=$valor['detalle'];            
             //SE DEBE CALCULAR EL MONTO DEL MATERIAL POR CADA UNO PRECIO*CANTIDAD - EL DESCUENTO ES UN DATO ADICIONAL
             $montoMaterial=$precioUnitario*$cantidadUnitaria;
             // $montoMaterialConDescuento=($precioUnitario*$cantidadUnitaria)-$descuentoProducto;
@@ -552,15 +531,4 @@ function obtenerAlmacen($cod_ciudad_externo,$enlaceCon){
         $cod_entidad=$dat['cod_entidad'];
     }
     return array($cod_ciudad,$cod_almacen,$cod_impuestos,$cod_entidad);
-}
-
-function obtenerDatosFactura($cod_factura_ibno,$enlaceCon){
-    //require("conexionmysqli2.php");
-    $sql="SELECT cod_salida_almacenes from salida_almacenes where cod_factura_ibno=$cod_factura_ibno";
-    $resp=mysqli_query($enlaceCon,$sql);    
-    $cod_salida_almacenes=0;
-    while ($dat = mysqli_fetch_array($resp)) {
-        $cod_salida_almacenes=$dat['cod_salida_almacenes'];
-    }
-    return $cod_salida_almacenes;
 }
