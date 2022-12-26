@@ -43,45 +43,45 @@ $nitCliente=4868422;
 $nombreFactura="CRISTIANO RONALDO";
 // $NombreEstudiante="CRISTIANO RONALDO";
 // $Concepto="PAGO DE CANCHA,DEL 1 AL 3 DEL MES";
-$tipoPago="1";
+$tipoPago="33"; //33 -> PAGO ONLINE
 $nroTarjeta=0;
 $tipoDocumento="1";
 $complementoDocumento="";
 // $periodoFacturado="JULIO-2022";
 
 
-  //Lista de Tipos documento
-// $parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, 
-//    "accion"=>"generarFacturaMinka", //
-//    // "idEmpresa"=>2, //ID de empresa, otorgado por minkasoftware
-//    // "nitEmpresa"=>'10916889016', //Nit de empresa
-//    "sucursal"=>$sucursal,   
-//    "idRecibo"=>$idRecibo,
-//    "fecha"=>$fecha,
-//    "idPersona"=>$idPersona,
-//    "monto_total"=>$monto_total,
-//    "descuento"=>$descuento,
-//    "monto_final"=>$monto_final,
-//    "id_usuario"=>$id_usuario,//***
-//    "usuario"=>$usuario,//***
-//    "nitCliente"=>$nitCliente,
-//    "nombreFactura"=>$nombreFactura,   
-//    "tipoPago"=>$tipoPago,
-//    "nroTarjeta"=>$nroTarjeta,
-//    "tipoDocumento"=>$tipoDocumento,
-//    "complementoDocumento"=>$complementoDocumento,
-//    "correo"=>"bsullcamani@gmail.com",
-//    "items"=>$arrayDetalle
-//    // ,"NombreEstudiante"=>$NombreEstudiante,
-//    // "periodoFacturado"=>$periodoFacturado
-// );  
+  // Lista de Tipos documento
+$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, 
+   "accion"=>"generarFacturaMinka", //
+   // "idEmpresa"=>2, //ID de empresa, otorgado por minkasoftware
+   // "nitEmpresa"=>'10916889016', //Nit de empresa
+   "sucursal"=>$sucursal,   
+   "idRecibo"=>$idRecibo,
+   "fecha"=>$fecha,
+   "idPersona"=>$idPersona,
+   "monto_total"=>$monto_total,
+   "descuento"=>$descuento,
+   "monto_final"=>$monto_final,
+   "id_usuario"=>$id_usuario,//***
+   "usuario"=>$usuario,//***
+   "nitCliente"=>$nitCliente,
+   "nombreFactura"=>$nombreFactura,   
+   "tipoPago"=>$tipoPago,
+   "nroTarjeta"=>$nroTarjeta,
+   "tipoDocumento"=>$tipoDocumento,
+   "complementoDocumento"=>$complementoDocumento,
+   "correo"=>"bsullcamani@gmail.com",
+   "items"=>$arrayDetalle
+   // ,"NombreEstudiante"=>$NombreEstudiante,
+   // "periodoFacturado"=>$periodoFacturado
+);  
     
 //formato base 64 factura
+// $parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, 
+//            "accion"=>"obtenerFacturaBase64Siat",
+//            "codFacturaIbno"=>31579
+//        ); 
 
-$parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, 
-           "accion"=>"obtenerFacturaBase64Siat",
-           "codFacturaIbno"=>31579
-       ); 
 $url="http://localhost:8080/minka_siat_ibno/wsminka/ws_generarFactura.php";
 //$url="https://intranet.ibnorca.org:8880/siat_ibno/wsminka/ws_generarFactura.php";
 $jsons=callService($parametros, $url);
