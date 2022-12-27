@@ -512,7 +512,7 @@ border-bottom: 1px solid #000;
    </style>
 
 <body>
-<div  style="height: 49.4%">
+<div style="height: 49.4%">
         <table  style="width: 100%;">
             <tr>
                 <td align="center" width="45%">
@@ -525,7 +525,6 @@ border-bottom: 1px solid #000;
                           Calle 7 N° 545 casi esq. Av. 14 de Septiembre * Zona Obrajes<br>
                           Teléfonos:(591-2) 2783628 - 2788368 - 2788609<br>
                           Web:www.ibnorca.org * E-mail:info@ibnorca.org<br>La Paz - Bolivia <br>
-                          SFC - 04
                         </span></small></small>
                     
                 </td>
@@ -547,9 +546,6 @@ border-bottom: 1px solid #000;
                         </tr>
 
                         <tr><td colspan="2"><?=$cuf?></td></tr>
-                        <tr><td colspan="2">
-                            <b>FECHA FACTURA : </b> <?=$fechaFactura?><br>
-                        </td></tr>
                     </table>
                     
                 </td>
@@ -558,14 +554,14 @@ border-bottom: 1px solid #000;
 
         <table class="table">
             <tr >
-                <td class="td-border-none text-left" width="15%" ><b>Nombre/Razón Social : </b></td>
-                <td class="td-border-none" width="43%"><?=$razonSocialCliente?></td>
+                <td class="td-border-none text-left" width="15%" ><b>Fecha: </b></td>
+                <td class="td-border-none" width="43%"><?=$fechaFactura;?></td>
                 <td class="td-border-none text-right" width="15%"><b>NIT/CI/CEX:</b></td>
                 <td class="td-border-none">&nbsp;&nbsp;&nbsp;<?=$nitCliente." ".$siat_complemento?></td>
             </tr>
             <tr >
-              <td class="td-border-none text-left" width="25%" ><b> </b></td>
-              <td class="td-border-none" ></td>
+              <td class="td-border-none text-left" width="25%" ><b>Nombre/Razón Social: </b></td>
+              <td class="td-border-none" ><?=$razonSocialCliente?></td>
               <td class="td-border-none text-right" ><b>Cod. Cliente :</b></td>
               <td class="td-border-none">&nbsp;&nbsp;&nbsp;<?=$cod_cliente?></td>
             </tr>
@@ -579,11 +575,11 @@ border-bottom: 1px solid #000;
         <table class="table2">
             <tr>
                 <td width="8%" class="text-center">Codigo Producto /<br>Servicio</td>
-                <td width="40%" class="text-center">Descripción</td>
-                <td width="8%" class="text-center">Unidad Medida</td>
                 <td width="8%" class="text-center">Cantidad</td>
-                <td class="text-center">Precio Unitario</td>
-                <td class="text-center">Descuento</td>
+                <td width="8%" class="text-center">Unidad Medida</td>
+                <td width="50%" class="text-center">Descripción</td>
+                <td class="text-center">Precio <br> Unitario</td>
+                <td class="text-center"><small>Descuento</small></td>
                 <td class="text-center">Subtotal</td>
             </tr>
             <?php
@@ -645,14 +641,14 @@ border-bottom: 1px solid #000;
                     ?>
                     <tr>
                         <td class="text-center" valign="top" style="padding-top: 0px;padding-bottom: 0px; border-bottom: hidden;border-top: hidden; font-size: 8px;"><?=$codInterno?></td>
+                        <td class="text-center" valign="top" style="padding-top: 0px;padding-bottom: 0px; border-bottom: hidden;border-top: hidden; font-size: 8px;"><?=$cantUnit?></td>
+                        <td class="text-center" valign="top" style="padding-top: 0px;padding-bottom: 0px; border-bottom: hidden;border-top: hidden; font-size: 8px;"><small><?=$unidad_medida?></small></td>
                         <td class="text-left" valign="top" style="padding-top: 0px;padding-bottom: 0px; border-bottom: hidden;border-top: hidden; font-size: 8px;">
                             <?=$nombreMat;?>
                         </td>
-                        <td class="text-center" style="padding-top: 0px;padding-bottom: 0px; border-bottom: hidden;border-top: hidden; font-size: 8px;"><small><?=$unidad_medida?></small></td>
-                        <td class="text-center" style="padding-top: 0px;padding-bottom: 0px; border-bottom: hidden;border-top: hidden; font-size: 8px;"><?=$cantUnit?></td>
-                        <td class="text-right" style="padding-top: 0px;padding-bottom: 0px; border-bottom: hidden;border-top: hidden; font-size: 8px;"><?=number_format($precioUnitFactura,2)?></td>
-                        <td class="text-right" style="padding-top: 0px;padding-bottom: 0px; border-bottom: hidden;border-top: hidden; font-size: 8px;"><?=number_format($descUnit,2)?></td>
-                        <td class="text-right" style="padding-top: 0px;padding-bottom: 0px; border-bottom: hidden;border-top: hidden; font-size: 8px;"><?=number_format($montoUnitProdDesc,2)?></td>
+                        <td class="text-right" valign="top" style="padding-top: 0px;padding-bottom: 0px; border-bottom: hidden;border-top: hidden; font-size: 8px;"><?=number_format($precioUnitFactura,2)?></td>
+                        <td class="text-right" valign="top" style="padding-top: 0px;padding-bottom: 0px; border-bottom: hidden;border-top: hidden; font-size: 8px;"><?=number_format($descUnit,2)?></td>
+                        <td class="text-right" valign="top" style="padding-top: 0px;padding-bottom: 0px; border-bottom: hidden;border-top: hidden; font-size: 8px;"><?=number_format($montoUnitProdDesc,2)?></td>
                     </tr>
                     
                     <?php $contador_items++;
@@ -709,7 +705,7 @@ border-bottom: 1px solid #000;
             $fechahora=date("dmy.His");
             $fileName="qrs/".$fechahora.$nroDocVenta.".png"; 
                 
-            QRcode::png($codeContents, $fileName,QR_ECLEVEL_L, 3);
+            QRcode::png($codeContents, $fileName,QR_ECLEVEL_L, 2.5);
 
             ?>
             <!-- <img src="<?=$fileName?>" style="margin: 0px;padding: 0;"> -->
@@ -726,10 +722,10 @@ border-bottom: 1px solid #000;
             }
                     ?>
             <tr>
-                <td rowspan="2" align="center" style="margin: 0px;">
+                <td rowspan="2" colspan="3" align="center" style="margin: 0px;">
                     <img src="<?=$fileName?>"/>
                 </td>
-                <td  colspan="6">
+                <td colspan="4">
                     <table class="table">
                         <tr ><td style="padding: 0px;margin: 0px;border-right: hidden;border-bottom: hidden;border-top: hidden;border-left: hidden;" valign="top">
                             <?php
@@ -769,12 +765,12 @@ border-bottom: 1px solid #000;
                                 </table>
 
                             </td>
-                        <tr >
-                    </table >
+                        <tr>
+                    </table>
                 </td>
             </tr>
             
-            <tr><td colspan="6" style="border-top:hidden;" valign="bottom"><span style="padding: 0px;margin: 0px;"><small><small>Forma de Pago: <?=$nombrePago?></small></small></span></td></tr>
+            <tr><td colspan="4" style="border-top:hidden;" valign="bottom"><span style="padding: 0px;margin: 0px;"><small><small>Forma de Pago: <?=$nombrePago?></small></small></span></td></tr>
             
         </table>
         <table class="table3" >

@@ -102,9 +102,9 @@ function sendemail($mail_username,$mail_userpassword,$mail_setFromEmail,$mail_se
 	  return 1;
 	}
 }
-function sendemailFiles($mail_username,$mail_userpassword,$mail_setFromEmail,$mail_setFromName,$mail_addAddress,$txt_message,$mail_subject, $template,$inicio,$rutaArchivo,$rutaArchivoCSV,$datosCabecera,$urlDir='',$variablex=0,$conn=null){
 
-	
+
+function sendemailFiles($mail_username,$mail_userpassword,$mail_setFromEmail,$mail_setFromName,$mail_addAddress,$txt_message,$mail_subject, $template,$inicio,$rutaArchivo,$rutaArchivoCSV,$datosCabecera,$urlDir='',$variablex=0,$conn=null){
 
 	if($inicio==0){
 		require_once 'PHPMailer/src/Exception.php';
@@ -167,6 +167,7 @@ function sendemailFiles($mail_username,$mail_userpassword,$mail_setFromEmail,$ma
 	// }
 	$mail->addAttachment($add_url."siat_folder/Siat/temp/Facturas-XML/".$datosCabecera['cuf'].".xml");
 	$mail->addAttachment($add_url."siat_folder/Siat/temp/Facturas-XML/".$datosCabecera['cuf'].".pdf");
+	//$mail->addAttachment("http://127.0.0.1:8090/minka_siat_ibno/formatoFacturaOnLine.php?codVenta=168");
 	///////////////////////////////////////para la version de php 7
 	$mail->SMTPOptions = array(
           'ssl' => array(

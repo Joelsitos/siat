@@ -15,4 +15,4 @@ $descripcion=$dat[1];
 // echo $ciudad.".".$cod_impuestos.".".$descripcion;
 abrirPuntoVenta($ciudad,$cod_impuestos,5,$descripcion,$codEntidad);
 ?>
-<script type="text/javascript">window.location.href='index.php'</script>
+<!--script type="text/javascript">window.location.href='index.php'</script-->

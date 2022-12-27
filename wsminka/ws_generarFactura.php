@@ -481,7 +481,7 @@ function generarFacturaSiat($sucursal,$idRecibo,$fecha,$idPersona,$monto_total,$
                     $codigoVenta=$codigo;
                     require_once "../descargarFacturaXml.php";
                     $codigoVenta=$codigo;
-                    require_once "../descargarFacturaPDF.php";
+                    require_once "../descargarFacturaPDF2.php";
 
                     $estado_envio=envio_factura($codigoVenta,$correo_destino,$enlaceCon);
                     if($estado_envio==1){
