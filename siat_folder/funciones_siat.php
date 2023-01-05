@@ -27,8 +27,8 @@ function solicitudEventoSignificativo($codigoClasificador,$descripcion,$codigoPu
  	return array($resEvent[0],$resEvent[1]);
 }
 
-function obtenerCuis_vigente_BD($cod_ciudad,$cod_entidad){
-	$sql="SELECT cuis from siat_cuis where cod_ciudad=$cod_ciudad and estado=1 and cod_entidad='$cod_entidad'";
+function obtenerCuis_vigente_BD($cod_ciudad,$cod_entidad=0){
+	$sql="SELECT cuis from siat_cuis where cod_ciudad=$cod_ciudad and estado=1";
 	 // echo $sql;
   $valor="0";
   // require("../../conexionmysqli2.php");
@@ -230,6 +230,13 @@ function verificarEstadoFactura($codVenta,$global_agencia=null){
   require_once "Siat/siat_cobofar/siat_factura_online.php";   
   $factura= new FacturaOnline();
   return $factura::verificarEstadoFactura($codVenta,$global_agencia);  
+}
+
+function consultaEventoSignificativo($fechaEvento,$global_agencia=null){
+  // require_once "Siat/siat_cobofar/siat_factura_online.php";   
+  // $factura= new FacturaOnline();
+  $eventoSignificativo= new FacturacionOffLine();
+  return $eventoSignificativo::consultaEventoSignificativo($fechaEvento,$global_agencia);  
 }
 
 

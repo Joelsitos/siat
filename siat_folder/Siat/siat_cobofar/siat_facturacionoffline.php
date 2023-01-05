@@ -250,5 +250,41 @@ class FacturacionOffLine
 		}
 	}
 
+	public static function consultaEventoSignificativo($fechaEvento,$global_agencia=null)
+	{
+
+
+		require dirname(__DIR__). SB_DS ."../../conexionmysqli2.inc";			
+		if($global_agencia==null){
+			$global_agencia=$_COOKIE["global_agencia"];
+		}
+		
+		$fechaActual=date("Y-m-d");
+		$consulta="SELECT s.cuis,c.cod_impuestos,(SELECT codigoPuntoVenta from siat_puntoventa where cod_ciudad=c.cod_ciudad limit 1) as punto_venta,(SELECT cufd from siat_cufd where fecha='$fechaActual' and cod_ciudad=c.cod_ciudad and s.cuis=cuis and estado=1 order by fecha limit 1)as siat_cufd from siat_cuis s join ciudades c on c.cod_ciudad=s.cod_ciudad where s.cod_ciudad='$global_agencia' and cod_gestion=YEAR(NOW()) and estado=1";		
+		$resp = mysqli_query($enlaceCon,$consulta);	
+		$dataList = $resp->fetch_array(MYSQLI_ASSOC);
+		$cuis = $dataList['cuis'];
+		$codigoPuntoVenta = $dataList['punto_venta'];
+		$cufd = $dataList['siat_cufd'];
+		$codigoSucursal = $dataList['cod_impuestos'];
+
+		$config = self::buildConfig();
+		$config->validate();
+		$serviceOps = new ServicioOperaciones($cuis, $cufd);
+		$serviceOps->wsdl = conexionSiatUrl::wsdlOperaciones;
+		$serviceOps->setConfig((array)$config);	
+		
+		$serviceOps->codigoPuntoVenta=$codigoPuntoVenta;
+		$serviceOps->codigoSucursal=$codigoSucursal;
+		$serviceOps->cufd=$cufd;
+		$serviceOps->cuis=$cuis;
+		 // echo "*+*";
+		 // print_r($serviceOps);
+		$res2 = $serviceOps->consultaEventoSignificativo($codigoSucursal,$codigoPuntoVenta,$fechaEvento);
+		// print_r($res2);
+		 return $res2;
+
+	}
+
 }
 
