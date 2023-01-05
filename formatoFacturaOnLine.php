@@ -1,4 +1,3 @@
-
 <?php
 $home=1;
 ob_start();
@@ -14,6 +13,8 @@ if(isset($_GET["codVenta"])){
 }else{
     $codigoVenta=$codigoVenta;
 }
+
+
 
 // $cod_ciudad=$_COOKIE["global_agencia"];
 $sql="SELECT a.cod_ciudad from salida_almacenes s join almacenes a on s.cod_almacen=a.cod_almacen where s.cod_salida_almacenes='$codigoVenta'";
@@ -93,6 +94,9 @@ $respDatosVenta=mysqli_query($enlaceCon,$sqlDatosVenta);
 $siat_complemento="";
 while($datDatosVenta=mysqli_fetch_array($respDatosVenta)){
     $cuf=$datDatosVenta['siat_cuf'];
+    $cufFormato=substr($cuf, 0, 20)."<br>".substr($cuf, 20, 20)."<br>".substr($cuf, 40, 20);
+
+
     $fechaVenta=$datDatosVenta[0];
     $nombreTipoDoc=$datDatosVenta[1];
     $nombreCliente=$datDatosVenta[2];
@@ -513,14 +517,14 @@ border-bottom: 1px solid #000;
 
 <body>
 <div style="height: 49.4%">
-        <table  style="width: 100%;">
+        <table  style="width: 100%;" border="0">
             <tr>
-                <td align="center" width="45%">
+                <td align="center" width="33%">
                   <img class="imagen-logo-izq_2" src="imagenes/logo_ibnorca_origen_3.jpg">
                         <br><br>
                         <span><b><u>
                           Instituto Boliviano de Normalización y Calidad</u><br>
-                          CASA MATRIZ - 0</b></span><br>
+                          CASA MATRIZ</b></span><br>
                           <span><small><small>
                           Calle 7 N° 545 casi esq. Av. 14 de Septiembre * Zona Obrajes<br>
                           Teléfonos:(591-2) 2783628 - 2788368 - 2788609<br>
@@ -528,24 +532,24 @@ border-bottom: 1px solid #000;
                         </span></small></small>
                     
                 </td>
-                
-                <td >
+                <td align="center" width="33%">
                     <div style="width:100%;text-align:center ;font-size: 14px"><p><b>FACTURA</b><br><small><small>(Con Derecho a Crédito Fiscal)</small></small></p></div><br>
+                </td>
+                <td width="33%">
                     <table style="width: 100%;border: black 1px solid;text-align: left;">
                         
                         <tr align="left">
-                          <td width="40%"><b>
-                              NIT : <br>
-                              FACTURA N° : <br>
-                              CÓD. AUTORIZACIÓN : </b>
-                          </td>
-                          <td>
-                              <?=$nitTxt?><br>
-                              <?=$nroDocVenta?><br>
-                          </td>
+                          <td width="40%"><b>NIT:</b></td>
+                          <td><?=$nitTxt?></td>
                         </tr>
-
-                        <tr><td colspan="2"><?=$cuf?></td></tr>
+                        <tr>
+                          <td><b>FACTURA N°:</b></td>
+                          <td><?=$nroDocVenta?></td>
+                        </tr>
+                        <tr>
+                          <td><b>CÓD. AUTORIZACIÓN:</b></td>
+                          <td><?=$cufFormato;?></td>
+                        </tr>
                     </table>
                     
                 </td>
@@ -572,6 +576,8 @@ border-bottom: 1px solid #000;
               <td class="td-border-none">&nbsp;&nbsp;&nbsp;</td>
             </tr>
         </table>
+
+
         <table class="table2">
             <tr>
                 <td width="8%" class="text-center">Codigo Producto /<br>Servicio</td>
@@ -589,8 +595,9 @@ border-bottom: 1px solid #000;
             <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
             <?php
 
-                $contador_items=0;                    
-                $cantidad_por_defecto=8;//cantidad de items por defect
+                $contador_items=0;  
+
+                $cantidad_por_defecto=5;//cantidad de items por defect
 
                 $sqlDetalle="SELECT m.codigo_material, s.orden_detalle,m.descripcion_material,s.observaciones,s.precio_unitario,sum(s.cantidad_unitaria) as cantidad_unitario,
                 sum(s.descuento_unitario) as descuento_unitario, sum(s.monto_unitario) as monto_unitario
@@ -705,7 +712,7 @@ border-bottom: 1px solid #000;
             $fechahora=date("dmy.His");
             $fileName="qrs/".$fechahora.$nroDocVenta.".png"; 
                 
-            QRcode::png($codeContents, $fileName,QR_ECLEVEL_L, 2.5);
+            QRcode::png($codeContents, $fileName,QR_ECLEVEL_L, 2);
 
             ?>
             <!-- <img src="<?=$fileName?>" style="margin: 0px;padding: 0;"> -->

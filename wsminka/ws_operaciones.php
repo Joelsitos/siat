@@ -6,7 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {//verificamos  metodo conexion
     //Parametros de consulta
     $accion=NULL;
     if(isset($datos['accion'])&&isset($datos['sIdentificador'])&&isset($datos['sKey'])){//verificamos existencia de datos de conexion
-        if($datos['sIdentificador']=="MinkaSw123*"&&$datos['sKey']=="rrf656nb2396k6g6x44434h56jzx5g6"){//verificamos datos de conexion
+        if( ($datos['sIdentificador']=="MinkaSw123*" || $datos['sIdentificador']=="facifin") && ($datos['sKey']=="rrf656nb2396k6g6x44434h56jzx5g6" || $datos['sKey']=="AX546321asbhy347bhas191001bn0rc4654")){//verificamos datos de conexion
             $accion=$datos['accion']; //recibimos la accion
             // $codPersonal=$datos['codPersonal'];//recibimos el codigo personal
             $estado=0;
