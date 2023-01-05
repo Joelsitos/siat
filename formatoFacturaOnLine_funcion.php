@@ -704,7 +704,7 @@ border-bottom: 1px solid #000;
             $fechahora=date("dmy.His");
             $fileName="../qrs/".$fechahora.$nroDocVenta.".png"; 
                 
-            QRcode::png($codeContents, $fileName,QR_ECLEVEL_L, 2.5);
+            QRcode::png($codeContents, $fileName,QR_ECLEVEL_L, 2);
 
             ?>
             <!-- <img src="<?=$fileName?>" style="margin: 0px;padding: 0;"> -->
@@ -721,7 +721,7 @@ border-bottom: 1px solid #000;
             }
                     ?>
             <tr>
-                <td rowspan="2" colspan="3" align="center" style="margin: 0px;">
+                <td  colspan="3" align="center" style="margin: 0px;">
                     <img src="<?=$fileName?>"/>
                 </td>
                 <td  colspan="4">
@@ -734,7 +734,8 @@ border-bottom: 1px solid #000;
                         if($centavos<10){
                             $centavos="0".$centavos;
                         }?>
-                        <span class="bold table-title" valign="bottom"><small>Son: <?="$txtMonto"." ".$montoDecimal."/100 Bolivianos"?></small></span>
+                        <span class="bold table-title" valign="bottom"><small>Son: <?="$txtMonto"." ".$montoDecimal."/100 Bolivianos"?></small></span><br><br><br><br><br>
+                        <span style="padding: 0px;margin: 0px;"><small><small>Forma de Pago: <?=$nombrePago?></small></small></span>
                         </td>
                             <td align="right" style="border-left: hidden;border-bottom: hidden; border-top: hidden;border-right: hidden;" valign="bottom">
                                 <table class="table" style="font-size: 9px;" >
@@ -768,9 +769,6 @@ border-bottom: 1px solid #000;
                     </table >
                 </td>
             </tr>
-            
-            <tr><td colspan="4" style="border-top:hidden;" valign="bottom"><span style="padding: 0px;margin: 0px;"><small><small>Forma de Pago: <?=$nombrePago?></small></small></span></td></tr>
-            
         </table>
         <table class="table3" >
             <tr align="center"><td>&quot;<?=$txt2?>&quot;<br>&quot;<?=$txt3?>&quot;<br>&quot;<?=$txtLeyendaFin?>&quot;</td></tr>

@@ -76,7 +76,7 @@ function enviarFacturasOffline($string_codigos,$enlaceCon){
     // $codigoPuntoVenta=obtenerPuntoVenta_BD($cod_ciudad);
     // $cuis=obtenerCuis_siat($codigoPuntoVenta,$cod_impuestos);
     $cuis=obtenerCuis_vigente_BD($cod_ciudad);
-    echo "aqui";
+    // echo "aqui";
     $cufd=obtenerCufd_Vigente_BD($cod_ciudad,$fecha_X,$cuis);
     
     if($cufd<>"0"){      
