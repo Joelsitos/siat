@@ -91,6 +91,7 @@ $respDatosVenta=mysqli_query($enlaceCon,$sqlDatosVenta);
 $siat_complemento="";
 while($datDatosVenta=mysqli_fetch_array($respDatosVenta)){
     $cuf=$datDatosVenta['siat_cuf'];
+    $cufFormato=substr($cuf, 0, 20)."<br>".substr($cuf, 20, 20)."<br>".substr($cuf, 40, 20);
     $fechaVenta=$datDatosVenta[0];
     $nombreTipoDoc=$datDatosVenta[1];
     $nombreCliente=$datDatosVenta[2];
@@ -513,36 +514,37 @@ border-bottom: 1px solid #000;
 <div  style="height: 49.4%">
         <table  style="width: 100%;">
             <tr>
-                <td align="center" width="45%">
+                <td align="center" width="33%">
                   <img class="imagen-logo-izq_2" src="../imagenes/logo_ibnorca_origen_3.jpg">
                         <br><br>
                         <span><b><u>
                           Instituto Boliviano de Normalización y Calidad</u><br>
-                          CASA MATRIZ - 0</b></span><br>
+                          CASA MATRIZ</b></span><br>
                           <span><small><small>
                           Calle 7 N° 545 casi esq. Av. 14 de Septiembre * Zona Obrajes<br>
                           Teléfonos:(591-2) 2783628 - 2788368 - 2788609<br>
                           Web:www.ibnorca.org * E-mail:info@ibnorca.org<br>La Paz - Bolivia <br>
                         </span></small></small>
                     
-                </td>                
-                <td >
-                    <div style="width:100%;text-align: center;font-size: 14px"><p><b>FACTURA</b><br><small><small>(Con Derecho a Crédito Fiscal)</small></small></p></div><br>
-                    
-                    <table style="width: 100%;border: black 1px solid;text-align: left;">    
+                </td>
+                <td align="center" width="33%">
+                    <div style="width:100%;text-align:center ;font-size: 14px"><p><b>FACTURA</b><br><small><small>(Con Derecho a Crédito Fiscal)</small></small></p></div><br>
+                </td>
+                <td width="33%">
+                    <table style="width: 100%;border: black 1px solid;text-align: left;">
+                        
                         <tr align="left">
-                          <td width="40%"><b>
-                              NIT : <br>
-                              FACTURA N° : <br>
-                              CÓD. AUTORIZACIÓN : </b>
-                          </td>
-                          <td>
-                              <?=$nitTxt?><br>
-                              <?=$nroDocVenta?><br>
-                          </td>
+                          <td width="40%"><b>NIT:</b></td>
+                          <td><?=$nitTxt?></td>
                         </tr>
-
-                        <tr><td colspan="2"><?=$cuf?></td></tr>
+                        <tr>
+                          <td><b>FACTURA N°:</b></td>
+                          <td><?=$nroDocVenta?></td>
+                        </tr>
+                        <tr>
+                          <td><b>CÓD. AUTORIZACIÓN:</b></td>
+                          <td><?=$cufFormato;?></td>
+                        </tr>
                     </table>
                     
                 </td>
