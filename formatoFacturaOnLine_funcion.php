@@ -1,16 +1,21 @@
 
 <?php
-function formatofacturaSIAT($codigoVenta){
+function formatofacturaSIAT($codigoVenta,$bandera_index=true,$tipo_entrada=1){
 
 $home=1;
 ob_start();
-
-include "conexionmysqli2.php";
-require_once('funciones.php');
-require('funcion_nombres.php');
-require('NumeroALetras.php');
-include('phpqrcode/qrlib.php'); 
-
+if($tipo_entrada==1){
+  $add_head="";
+}else{
+  $add_head="../";  
+}
+include $add_head."conexionmysqli2.php";
+if($bandera_index){  
+  require_once($add_head.'funciones.php');  
+  require($add_head.'funcion_nombres.php');  
+  require($add_head.'NumeroALetras.php');  
+  include($add_head.'phpqrcode/qrlib.php');  
+}
 
 
 // $cod_ciudad=$_COOKIE["global_agencia"];
@@ -84,7 +89,7 @@ $periodoFacturado=mysqli_result($respDatosFactura,0,7);
 $cod_funcionario=$_COOKIE["global_usuario"];
 //datos documento
 $sqlDatosVenta="select DATE_FORMAT(s.fecha, '%d/%m/%Y'), t.`nombre`, 'cliente', s.`nro_correlativo`, s.descuento, s.hora_salida,s.monto_total,s.monto_final,s.monto_efectivo,s.monto_cambio,s.cod_chofer,s.cod_tipopago,s.cod_tipo_doc,s.fecha,(SELECT cod_ciudad from almacenes where cod_almacen=s.cod_almacen)as cod_ciudad,s.cod_cliente,s.siat_cuf,s.siat_complemento,(SELECT nombre_tipopago from tipos_pago where cod_tipopago=s.cod_tipopago) as nombre_pago,s.siat_fechaemision,s.siat_codigotipoemision,s.siat_codigoPuntoVenta,(SELECT descripcionLeyenda from siat_sincronizarlistaleyendasfactura where codigo=s.siat_cod_leyenda) as leyenda,(SELECT siat_unidadProducto from ciudades where cod_ciudad in (select cod_ciudad from almacenes where cod_almacen=s.cod_almacen)) as unidad_medida
-        from `salida_almacenes` s, `tipos_docs` t, `clientes` c
+        from `salida_almacenes` s, `tipos_docs` t
         where s.`cod_salida_almacenes`='$codigoVenta' and s.cod_tipo_doc=t.codigo";
         // echo $sqlDatosVenta;
 $respDatosVenta=mysqli_query($enlaceCon,$sqlDatosVenta);
@@ -689,10 +694,6 @@ border-bottom: 1px solid #000;
                 $montoDecimal="00";
             }
             $txtMonto=NumeroALetras::convertir($montoEntero);
-
-            ?>
-
-            <?php
             
              $sqlDir="select valor_configuracion from configuraciones where id_configuracion=46";
             $respDir=mysqli_query($enlaceCon,$sqlDir);
