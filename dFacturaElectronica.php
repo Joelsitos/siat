@@ -2,11 +2,22 @@
 <?php
 require "conexionmysqli.inc";
 $codSalida=$_GET['codigo_salida'];
+
+if(isset($_GET['admin'])){
+  $admin=$_GET['admin'];
+}else{
+  $admin=0;
+}
 //obtenemos la sucursal de la factura
-$sql="SELECT a.cod_ciudad from salida_almacenes s join almacenes a on s.cod_almacen=a.cod_almacen where s.cod_salida_almacenes='$codSalida'";
+$sql="SELECT a.cod_ciudad,s.nro_correlativo,s.razon_social,s.fecha 
+from salida_almacenes s join almacenes a on s.cod_almacen=a.cod_almacen 
+where s.cod_salida_almacenes='$codSalida'";
 // echo $sql;
 $respq=mysqli_query($enlaceCon,$sql);
 $globalSucursal=mysqli_result($respq,0,0);
+$nro_correlativo=mysqli_result($respq,0,1);
+$razon_social=mysqli_result($respq,0,2);
+$fecha_factura=mysqli_result($respq,0,3);
 // $globalSucursal=$_COOKIE['global_agencia'];
 
 ?>
@@ -93,7 +104,6 @@ if(isset($_GET['r'])){
 
 
                 ?><script type="text/javascript">window.location.href='formatoFacturaOnLine.php?codVenta=<?=$codSalida?>'</script><?php
-
             }else{
                 $codigoError=$facturaImpuestos[0]->RespuestaServicioFacturacion->mensajesList->codigo;
                 $mens="<b>(".$facturaImpuestos[0]->RespuestaServicioFacturacion->mensajesList->codigo.") ".$facturaImpuestos[0]->RespuestaServicioFacturacion->mensajesList->descripcion."</b>";
@@ -102,7 +112,7 @@ if(isset($_GET['r'])){
                         where cod_salida_almacenes='$codSalida' "; //,siat_fechaemision='$fechaEmision',
                 $respUpdMonto=mysqli_query($enlaceCon,$sqlUpdMonto);
                 $errorFacturaXml=1;
-            }           
+            }
         }
     $stringEstado="";
 }else{
@@ -189,7 +199,7 @@ $estadoFacturacion=$datConf[0];
   var cad2=$("input#idtxtclave").val(); 
   var per=$("#rpt_personal").val(); 
 
-  var rpt_tipoanulacion=$("#rpt_tipoanulacion").val(); 
+  // var rpt_tipoanulacion=$("#rpt_tipoanulacion").val(); 
   // var glosa_anulacion=$("input#glosa_anulacion").val(); 
 
   var enviar_correo=$("input#enviar_correo").val();
@@ -203,7 +213,7 @@ $estadoFacturacion=$datConf[0];
         data: parametros,
         success:  function (resp) { 
             if(resp==1) {
-                location.href='anular_venta_siat.php?codigo_registro='+$("#codigo_salida").val()+'&id_caja='+per+'&enviar_correo='+enviar_correo+'&correo_destino='+correo_destino+'&rpt_tipoanulacion='+rpt_tipoanulacion;
+                location.href='anular_venta_siat.php?codigo_registro='+$("#codigo_salida").val()+'&id_caja='+per+'&enviar_correo='+enviar_correo+'&correo_destino='+correo_destino;
             }else{
                Swal.fire("Error!","El codigo que ingreso es incorrecto","error");
                $("#modalAnularFactura").modal("hide");    
@@ -214,7 +224,7 @@ $estadoFacturacion=$datConf[0];
 </script>
 <div class="card">
     <div class="card-header card-header-primary">
-        <h4>Detalle de Factura Electronica SIAT</h4>
+        <h4>Detalle de Factura Electronica SIAT ---- Nro Factura : <?=$nro_correlativo?>, Razón Social : <?=$razon_social?>, Fecha : <?=$fecha_factura?></h4>
     </div>        
     <div class="card-body">
         <?=$stringEstado?>
@@ -241,7 +251,7 @@ $estadoFacturacion=$datConf[0];
             </div>
          </a>
         </div>
-        <div class="col-lg-3 col-md-8 mb-5 mb-lg-0 mx-auto">
+        <!--div class="col-lg-3 col-md-8 mb-5 mb-lg-0 mx-auto">
          <a href="#" onclick="window.open('descargarFacturaPDF.php?codigo_salida=<?=$codSalida?>&ds=1','detalle_factura'); return false;" class="after-loop-item card border-0 card-tercero shadow-lg" style="background: #EE0808;color:#fff;" onclick="return false;">
             <div class="card-body d-flex align-items-center flex-column">
                <h4><i class="material-icons">description</i> <b>DESCARGAR PDF</b></h4>
@@ -256,18 +266,19 @@ $estadoFacturacion=$datConf[0];
                <p>FACTURA COMPUTARIZADA</p>
             </div>
          </a>
-        </div>
-        <div class="col-lg-4 col-md-8 mb-5 mb-lg-0 mx-auto">
-         <button class="after-loop-item card border-0 card-tercero shadow-lg" style="background:#FF5733;color:#fff;" onclick='anular_salida_siat(<?=$codigo_salida?>)'>
-            <div class="card-body d-flex align-items-center flex-column">
-              <center>
-               <h4><i class="material-icons">delete</i> <b>ANULAR FACTURA</b></h4>
-               </center>
-               <p>FACTURA COMPUTARIZADA</p>
-            </div>
-         </button>
-         
-        </div>
+        </div-->
+          <div class="col-lg-4 col-md-8 mb-5 mb-lg-0 mx-auto">
+           <button class="after-loop-item card border-0 card-tercero shadow-lg" style="background:#FF5733;color:#fff;" onclick='anular_salida_siat(<?=$codigo_salida?>)'>
+              <div class="card-body d-flex align-items-center flex-column">
+                <center>
+                 <h4><i class="material-icons">delete</i> <b>ANULAR FACTURA</b></h4>
+                 </center>
+                 <p>FACTURA COMPUTARIZADA</p>
+              </div>
+           </button>
+           
+          </div>
+        
         </div>
         <center>
         <div id="wrap" style="width:100% !important">
@@ -357,7 +368,7 @@ $estadoFacturacion=$datConf[0];
             </div>
          </a>
          </div>
-        <div class="col-lg-3 col-md-8 mb-5 mb-lg-0 mx-auto">
+        <!--div class="col-lg-3 col-md-8 mb-5 mb-lg-0 mx-auto">
          <a href="#" onclick="window.open('descargarFacturaPDF.php?codigo_salida=<?=$codSalida?>&ds=1','detalle_factura'); return false;" class="after-loop-item card border-0 card-tercero shadow-lg" style="background: #909090;color:#fff;" onclick="return false;">
             <div class="card-body d-flex align-items-center flex-column">
                <h4><i class="material-icons">description</i> <b>DESCARGAR PDF</b></h4>
@@ -372,7 +383,7 @@ $estadoFacturacion=$datConf[0];
                <p>FACTURA COMPUTARIZADA OFFLINE</p>
             </div>
          </a>
-        </div>  
+        </div-->  
         <?php
         }
 
