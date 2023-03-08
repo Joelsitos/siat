@@ -5,7 +5,7 @@ require_once 'config.php';
 set_time_limit(0);
 error_reporting(0);
 
-$enlaceCon=mysqli_connect(DATABASE_HOST,DATABASE_USER,DATABASE_PASSWORD,DATABASE_NAME);
+$enlaceCon=mysqli_connect(DATABASE_HOST,DATABASE_USER,DATABASE_PASSWORD,DATABASE_NAME,DATABASE_PORT);
 
 
 if (mysqli_connect_errno())

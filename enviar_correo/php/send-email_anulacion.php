@@ -5,7 +5,7 @@ require 'PHPMailer/send.php';
 function envio_facturaanulada($idproveedor,$proveedor,$nro_correlativo,$cuf,$nitCliente,$sucursalCliente,$estado_siatCliente,$fechaCliente,$correosProveedor,$enlaceCon){
   $email = "";//cc de correo
   // $contact_message = trim($_POST['message']);
-  $mail_username="KIDSPLACE";//Correo electronico emisor
+  $mail_username="IBNORCA SIAT";//Correo electronico emisor
   $mail_userpassword="";// contraseña correo emisor
   require_once("funciones.php");
   // $idproveedor=$_POST['idproveedor'];
@@ -28,20 +28,18 @@ function envio_facturaanulada($idproveedor,$proveedor,$nro_correlativo,$cuf,$nit
     /*Inicio captura de datos enviados por $_POST para enviar el correo */
     $mail_setFromEmail=$mail_username;
     $mail_setFromName=$mail_username;
-    $titulo_pedido_email="ANULACION DE FACTURA: Nro:".$nro_correlativo;
-    $txt_message="Estimado Cliente:<br>\n<br>\n
-      La factura Nro: ".$nro_correlativo;
-    $txt_message.="<br>\n      
-      Fue Anulada.<br>\n<br>\n
-      Gracias por su preferencia!"; //Con CUF: ".$cuf."<br>\n
+    $titulo_pedido_email="Anulación de Factura Nro: ".$nro_correlativo;
+    $txt_message="Estimado Cliente:<br>\n<br>\n La factura Nro: ".$nro_correlativo." fue Anulada.<br>\n Gracias por su atención."; 
 
     $mail_subject=$titulo_pedido_email; //el subject del mensaje
 
       $datosCabecera['cuf']=$cuf;
-      $datosCabecera['nombre_cliente']="<li>Cliente: ".$proveedor."</li>";
+      
+      /*$datosCabecera['nombre_cliente']="<li>Cliente: ".$proveedor."</li>";
       if($idproveedor==146){
         $datosCabecera['nombre_cliente']="";
-      }        
+      } */
+      $datosCabecera['nombre_cliente']="";    
       $datosCabecera['nro_factura']=$nro_correlativo;
       $datosCabecera['nit']=$nitCliente;
       
@@ -77,7 +75,7 @@ function envio_factura($codigoFac,$correosProveedor,$enlaceCon){
     $template="../enviar_correo/php/PHPMailer/email_template.html";//Ruta de la plantilla HTML para enviar nuestro mensaje
   
     $sqlDatosVenta="select DATE_FORMAT(s.fecha, '%d/%m/%Y'), t.`nombre`, ' ' as nombre_cliente, s.`nro_correlativo`, s.descuento, s.hora_salida,s.monto_total,s.monto_final,s.monto_efectivo,s.monto_cambio,s.cod_chofer,s.cod_tipopago,s.cod_tipo_doc,s.fecha,(SELECT cod_ciudad from almacenes where cod_almacen=s.cod_almacen)as cod_ciudad,s.cod_cliente,s.siat_cuf,s.siat_complemento,(SELECT nombre_tipopago from tipos_pago where cod_tipopago=s.cod_tipopago) as nombre_pago,s.siat_fechaemision,s.siat_codigotipoemision,s.siat_codigoPuntoVenta,(SELECT descripcionLeyenda from siat_sincronizarlistaleyendasfactura where codigo=s.siat_cod_leyenda) as leyenda,s.nit,
-    (SELECT nombre_ciudad from ciudades where cod_ciudad=(SELECT cod_ciudad from almacenes where cod_almacen=s.cod_almacen))as nombre_ciudad,s.siat_codigotipodocumentoidentidad,s.siat_estado_facturacion
+    (SELECT nombre_ciudad from ciudades where cod_ciudad=(SELECT cod_ciudad from almacenes where cod_almacen=s.cod_almacen))as nombre_ciudad,s.siat_codigotipodocumentoidentidad,s.siat_estado_facturacion, s.razon_social
         from `salida_almacenes` s, `tipos_docs` t
         where s.`cod_salida_almacenes` in ($codigoFac) and
         s.`cod_tipo_doc`=t.`codigo`";
@@ -88,10 +86,8 @@ function envio_factura($codigoFac,$correosProveedor,$enlaceCon){
     while($datDatosVenta=mysqli_fetch_array($respDatosVenta)){
       $nombreCliente=$datDatosVenta[2];
       $datosCabecera['cuf']=$datDatosVenta['siat_cuf'];
-      $datosCabecera['nombre_cliente']="<li>Cliente: ".$datDatosVenta[2]."</li>";
-      if($datDatosVenta['cod_cliente']==146){
-        $datosCabecera['nombre_cliente']="";
-      }        
+      $datosCabecera['nombre_cliente']="<li>Razón Social: ".$datDatosVenta['razon_social']."</li>";
+
       $datosCabecera['nro_factura']=$datDatosVenta[3];
       if($datDatosVenta['siat_codigotipodocumentoidentidad']==5){
         $datosCabecera['nit']=$datDatosVenta['nit'];  
@@ -102,14 +98,13 @@ function envio_factura($codigoFac,$correosProveedor,$enlaceCon){
       $datosCabecera['estado_siat']=$datDatosVenta['siat_estado_facturacion'];        
       $datosCabecera['fecha']=date("d/m/Y",strtotime($datDatosVenta['siat_fechaemision']));
     }
-    // $mail_username="KIDSPLACE";//Correo electronico emisor
     $mail_addAddress=$correosProveedor;
 
     $titulo_pedido_email="IBNORCA SIAT"; //Factura Nro: ".$datosCabecera['nro_factura'];
     $txt_message="Estimado Cliente: "."<br>\n<br>\n
-      Adjuntamos la factura Nro: ".$datosCabecera['nro_factura']." con fecha: ".$datosCabecera['fecha'];
+      Adjuntamos la factura Nro: ".$datosCabecera['nro_factura'].".";
     $txt_message.="<br>\n<br>\n
-      Gracias!"; //Con CUF: ".$cuf."<br>\n
+      Gracias."; //Con CUF: ".$cuf."<br>\n
     $mail_subject=$titulo_pedido_email; //el subject del mensaje
     $mail_setFromEmail="";
     $mail_setFromName="";

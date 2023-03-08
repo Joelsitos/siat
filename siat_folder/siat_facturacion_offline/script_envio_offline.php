@@ -2,6 +2,12 @@
 require("../../conexionmysqli2.php");
 require("../funciones_siat.php");
 require("consultaEvento.php");
+
+
+ error_reporting(E_ALL);
+ ini_set('display_errors', '1');
+
+
 $DatosConexion=verificarConexion();
 if($DatosConexion[0]==1){
   $cod_tipoEmision=2;//tipo emision OFFLINE

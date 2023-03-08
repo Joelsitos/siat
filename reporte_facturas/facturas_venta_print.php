@@ -5,6 +5,7 @@ set_time_limit(0);
 require_once('../formatoFacturaOnLine_funcion.php');
 
 include "../conexionmysqli.php";
+include "../funciones.php";
 
 
 $html="";
@@ -23,8 +24,7 @@ if(isset($_POST['numero_rango'])){
 }
 
 $sqlDatosVenta="select s.cod_salida_almacenes,s.salida_anulada from salida_almacenes s 
-where s.fecha BETWEEN '$fechaDesde' and '$fechaHasta' $sql_rangoNumero
-order by s.nro_correlativo asc ";
+where s.fecha BETWEEN '$fechaDesde' and '$fechaHasta' $sql_rangoNumero and s.salida_anulada=0 order by s.nro_correlativo asc ";
          // echo $sqlDatosVenta;
 $bandera_index=true;
 $tipo_entrada=2;
@@ -45,7 +45,8 @@ $nombreFile="../siat_folder/Siat/temp/Facturas-XML/cadenafacturas.pdf";
 // unlink($nombreFile);
 //descargarPDFFacturasCopiaCliente("cadena facturas",$html,50,$nombreFile);
 $sw=true;
-guardarPDFArqueoCajaVerticalFactura("cadena facturas",$html,$nombreFile,-100,$sw);
+
+guardarPDFFacturasLote("cadena facturas",$html,$nombreFile,-100,$sw);
 
 ?><script type="text/javascript">
         var link = document.createElement('a');

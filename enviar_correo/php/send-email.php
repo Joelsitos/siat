@@ -35,10 +35,6 @@ $urlDir=$datValidar[0];
     if($email!=""){
       $mail_addAddress.=",".$email;  
     }
-    //$mail_addAddress="dhuarina@farmaciasbolivia.com.bo,asd";//correo electronico destino
-
-
-
 
     $template="PHPMailer/email_template.html";//Ruta de la plantilla HTML para enviar nuestro mensaje
     /*Inicio captura de datos enviados por $_POST para enviar el correo */
@@ -49,7 +45,7 @@ $urlDir=$datValidar[0];
 
 
     $sqlDatosVenta="select DATE_FORMAT(s.fecha, '%d/%m/%Y'), t.`nombre`, ' ' as nombre_cliente, s.`nro_correlativo`, s.descuento, s.hora_salida,s.monto_total,s.monto_final,s.monto_efectivo,s.monto_cambio,s.cod_chofer,s.cod_tipopago,s.cod_tipo_doc,s.fecha,(SELECT cod_ciudad from almacenes where cod_almacen=s.cod_almacen)as cod_ciudad,s.cod_cliente,s.siat_cuf,s.siat_complemento,(SELECT nombre_tipopago from tipos_pago where cod_tipopago=s.cod_tipopago) as nombre_pago,s.siat_fechaemision,s.siat_codigotipoemision,s.siat_codigoPuntoVenta,(SELECT descripcionLeyenda from siat_sincronizarlistaleyendasfactura where codigo=s.siat_cod_leyenda) as leyenda,s.nit,
-    (SELECT nombre_ciudad from ciudades where cod_ciudad=(SELECT cod_ciudad from almacenes where cod_almacen=s.cod_almacen))as nombre_ciudad,s.siat_codigotipodocumentoidentidad,s.siat_estado_facturacion
+    (SELECT nombre_ciudad from ciudades where cod_ciudad=(SELECT cod_ciudad from almacenes where cod_almacen=s.cod_almacen))as nombre_ciudad,s.siat_codigotipodocumentoidentidad,s.siat_estado_facturacion, s.razon_social
         from `salida_almacenes` s, `tipos_docs` t
         where s.`cod_salida_almacenes` in ($codPedidos) and
         s.`cod_tipo_doc`=t.`codigo`";
@@ -57,10 +53,8 @@ $urlDir=$datValidar[0];
     $datosCabecera=[];
     while($datDatosVenta=mysqli_fetch_array($respDatosVenta)){
         $datosCabecera['cuf']=$datDatosVenta['siat_cuf'];
-        $datosCabecera['nombre_cliente']="<li>Cliente: ".$datDatosVenta[2]."</li>";
-        if($datDatosVenta['cod_cliente']==146){
-          $datosCabecera['nombre_cliente']="";
-        }        
+        $datosCabecera['nombre_cliente']="<li>Raz&oacuote;n Social: ".$datDatosVenta['razon_social']."</li>";
+
         $datosCabecera['nro_factura']=$datDatosVenta[3];
         if($datDatosVenta['siat_codigotipodocumentoidentidad']==5){
           $datosCabecera['nit']=$datDatosVenta['nit'];  

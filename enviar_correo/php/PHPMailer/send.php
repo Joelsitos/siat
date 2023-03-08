@@ -156,15 +156,6 @@ function sendemailFiles($mail_username,$mail_userpassword,$mail_setFromEmail,$ma
 	    $mail->addAddress($correo_array[$i]);   // Agregar quien recibe el e-mail enviado
 	}
 
-
-	// $adjuntos=explode( ',', $rutaArchivo);
-	// for ($i=0; $i <count($adjuntos) ; $i++) { 
-	// 	$mail->addAttachment("../../siat_folder/Siat/temp/Facturas-XML/".$adjuntos[$i]);
-	// }
-	// $adjuntosCSV=explode( ',', $rutaArchivoCSV);
-	// for ($i=0; $i <count($adjuntosCSV) ; $i++) { 
-	// 	$mail->addAttachment("../../siat_folder/Siat/temp/Facturas-XML/".$adjuntosCSV[$i]);
-	// }
 	$mail->addAttachment($add_url."siat_folder/Siat/temp/Facturas-XML/".$datosCabecera['cuf'].".xml");
 	$mail->addAttachment($add_url."siat_folder/Siat/temp/Facturas-XML/".$datosCabecera['cuf'].".pdf");
 	//$mail->addAttachment("http://127.0.0.1:8090/minka_siat_ibno/formatoFacturaOnLine.php?codVenta=168");

@@ -118,9 +118,18 @@ function sincronizarCufdCuis(globalEntidad){
                             $cufd="No registrado en la base local";
                           }  
 
-                          $botonPuntoVenta='<div class="btn-group"><a href="#" onclick="generarCUIS('.$codigo.','.$globalEntidad.');return false;" class=" btn btn-sm btn-primary" title="OBTENER CUIS"><i class="material-icons">compare_arrows</i> CUIS</a><a href="#" onclick="generarCUFD('.$codigo.','.$globalEntidad.');return false;" class=" btn btn-sm btn-info" title="OBTENER CUFD"><i class="material-icons">compare_arrows</i> CUFD</a></div>';
+                          $botonPuntoVenta='<div class="btn-group"><a href="#" onclick="generarCUIS('.$codigo.','.$globalEntidad.');return false;" class=" btn btn-sm btn-primary" title="OBTENER CUIS"><i class="material-icons">compare_arrows</i> CUIS</a><a href="#" onclick="generarCUFD('.$codigo.','.$globalEntidad.');return false;" class=" btn btn-sm btn-info" title="OBTENER CUFD"><i class="material-icons">compare_arrows</i> CUFD</a>
+
+                          <a href="../../siat_folder/siat_facturacion_offline/facturas_sincafc_list2.php?rpt_territorio='.$codigo.'" target="_blank"
+                        class="btn btn-sm btn-rose" style="background: #007568;"">Facturas OFFLINE</a>
+
+                          </div>';
+
+
                           
                           ?>
+
+
                           <tr>
                             <!-- <td class="text-left"><?=$codigo?></td> -->
                             <!-- <td class="text-left"><?=$descripcion?></td> -->

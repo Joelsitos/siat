@@ -8,7 +8,9 @@ if(isset($_GET['cod_ciudad']) && isset($_GET['fecha'])){
 	}
 	require_once("../funciones_siat.php");
 	require_once("../../conexionmysqli2.inc");
-	$DatosConexion=verificarConexion();
+	//$DatosConexion=verificarConexion();
+	$DatosConexion[0]=1;
+	
 	if($DatosConexion[0]==1){
 		$stringFechas=$_GET['fecha'];
 		$arrayFechas=explode(",", $stringFechas);

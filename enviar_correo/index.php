@@ -28,6 +28,8 @@ while ($dat = mysqli_fetch_array($resp)) {
   // $fecha_salida_mostrar = "$fecha_salida[8]$fecha_salida[9]-$fecha_salida[5]$fecha_salida[6]-$fecha_salida[0]$fecha_salida[1]$fecha_salida[2]$fecha_salida[3]";
   $fecha_salida_mostrar=date("d-m-Y",strtotime($dat['siat_fechaemision']));
 
+  $nombreRazonSocial=$dat['razon_social'];
+  
   $obs_salida = nombreVisitador($enlaceCon,$dat['cod_chofer']);
   $nro_correlativo = $dat[4];
   $proveedor=$dat['cliente'];

@@ -594,7 +594,7 @@ border-bottom: 1px solid #000;
             <?php
 
                 $contador_items=0;                    
-                $cantidad_por_defecto=8;//cantidad de items por defect
+                $cantidad_por_defecto=5;//cantidad de items por defect
 
                 $sqlDetalle="SELECT m.codigo_material, s.orden_detalle,m.descripcion_material,s.observaciones,s.precio_unitario,sum(s.cantidad_unitaria) as cantidad_unitario,
                 sum(s.descuento_unitario) as descuento_unitario, sum(s.monto_unitario) as monto_unitario
