@@ -66,8 +66,28 @@ $urlDir=$datValidar[0];
         $datosCabecera['estado_siat']=$datDatosVenta['siat_estado_facturacion'];        
         $datosCabecera['fecha']=date("d/m/Y",strtotime($datDatosVenta['siat_fechaemision']));
     }
+    /*****************************************************************************************/
+    // echo "**".var_dump($urlDir)."**";	}
+    // GENERAR XML	
+    // require_once "siat_folder/funciones_siat.php";  
+    // $facturaImpuestos=generarXMLFacturaVentaImpuestos($datosCabecera['nro_factura']);
+    // $nombreFile="../siat_folder/Siat/temp/Facturas-XML/".$datosCabecera['cuf'].".xml";
+    // unlink($nombreFile);	
+    // $archivo = fopen($nombreFile,'a');    
+    // fputs($archivo,$facturaImpuestos);
+    // fclose($archivo);
 
-    // echo "**".var_dump($urlDir)."**";
+    // GENERACIÓN PDF
+    unlink($add_url."siat_folder/Siat/temp/Facturas-XML/".$datosCabecera['cuf'].".pdf");
+    $urlSIAT="http://localhost/minka_siat_ibno/";
+    $url = $urlSIAT."formatoFacturaOnLine.php?codVenta=".$codPedidos;
+    //Get content as a string. You can get local content or download it from the web.
+    $downloadedFile = file_get_contents($url);
+    //Save content from string to .html file.
+      $nombreFile="../../siat_folder/Siat/temp/Facturas-XML/".$datosCabecera['cuf'].".pdf";
+    file_put_contents($nombreFile, $downloadedFile);
+    /*****************************************************************************************/
+
     $flag=sendemailFiles($mail_username,$mail_userpassword,$mail_setFromEmail,$mail_setFromName,$mail_addAddress,$txt_message,$mail_subject,$template,0,$rutaArchivo,$rutaArchivoCSV,$datosCabecera,$urlDir);
     // $flag=1;
     if($flag!=0){//se envio correctamente
