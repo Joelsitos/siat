@@ -53,7 +53,7 @@ $urlDir=$datValidar[0];
     $datosCabecera=[];
     while($datDatosVenta=mysqli_fetch_array($respDatosVenta)){
         $datosCabecera['cuf']=$datDatosVenta['siat_cuf'];
-        $datosCabecera['nombre_cliente']="<li>Raz&oacuote;n Social: ".$datDatosVenta['razon_social']."</li>";
+        $datosCabecera['nombre_cliente']="<li>Razón Social: ".$datDatosVenta['razon_social']."</li>";
 
         $datosCabecera['nro_factura']=$datDatosVenta[3];
         if($datDatosVenta['siat_codigotipodocumentoidentidad']==5){
