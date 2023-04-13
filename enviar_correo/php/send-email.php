@@ -79,7 +79,8 @@ $urlDir=$datValidar[0];
 
     // GENERACIÓN PDF
     unlink($add_url."siat_folder/Siat/temp/Facturas-XML/".$datosCabecera['cuf'].".pdf");
-    $urlSIAT="http://localhost/minka_siat_ibno/";
+    // $urlSIAT="http://localhost/minka_siat_ibno/";
+    $urlSIAT="http://ibnored.ibnorca.org/siat_ibno/";
     $url = $urlSIAT."formatoFacturaOnLine.php?codVenta=".$codPedidos;
     //Get content as a string. You can get local content or download it from the web.
     $downloadedFile = file_get_contents($url);
