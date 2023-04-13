@@ -18,7 +18,7 @@ $stringDetallePedido="";
 $tituloMensajeEnvio="";
 $idProveedor=0;
 
-$consulta = "SELECT i.cod_salida_almacenes, i.fecha, i.hora_salida, i.razon_social, i.nro_correlativo, i.salida_anulada,(select p.nombre_cliente from clientes p where p.cod_cliente=i.cod_cliente) as cliente,i.cod_cliente,i.cod_chofer,i.siat_fechaemision,i.siat_cuf,i.monto_final FROM salida_almacenes i WHERE i.salida_anulada!=1 and i.cod_salida_almacenes in ($datos) ";             
+$consulta = "SELECT i.cod_salida_almacenes, i.fecha, i.hora_salida, i.razon_social, i.nro_correlativo, i.salida_anulada,(select p.nombre_cliente from clientes p where p.cod_cliente=i.cod_cliente) as cliente,i.cod_cliente,i.cod_chofer,i.siat_fechaemision,i.siat_cuf,i.monto_final, i.siat_nombreEstudiante FROM salida_almacenes i WHERE i.salida_anulada!=1 and i.cod_salida_almacenes in ($datos) ";             
 $consulta = $consulta."";
             //echo $consulta;
 $resp = mysqli_query($enlaceCon,$consulta);
@@ -40,6 +40,8 @@ while ($dat = mysqli_fetch_array($resp)) {
   $cuf=$dat['siat_cuf'];
   $monto_final=number_format($dat['monto_final'],2,'.',',');
   $existePedidos++;
+
+  $siat_nombreEstudiante=$dat['siat_nombreEstudiante'];
 
   //datos pedido
   $lineasPedido="";$hijos="";
@@ -67,10 +69,6 @@ $stringMensaje="Estimado Cliente ".$proveedor.":
  
 Adjuntamos la factura ".$stringMensajeInter;
 
-
-$stringMensaje.=".
- 
-Gracias por su Compra!";
 
 
 $correosProveedor=obtenerCorreosListaCliente($idProveedor);
@@ -193,7 +191,7 @@ while($detalle=mysqli_fetch_array($resp)){
               <div class="row">
                 <div class="col-md-12 form-group mb-1">
                   <label for="" class="col-form-label">Para</label>
-                  <input type="text" class="form-control tagsinput" name="name" id="name" style="font-size: 15px;color:#900C3F;" data-role="tagsinput" value="<?=$correosProveedor?>" placeholder="cliente@example.com">
+                  <input type="text" class="form-control tagsinput" name="name" id="name" style="font-size: 15px;color:#900C3F;" data-role="tagsinput" value="<?=$correosProveedor?>, <?=$siat_nombreEstudiante?>" placeholder="cliente@example.com">
                   <input type="hidden" id="correo_autocompleteids">
                   <input type="hidden" id="adjuntos_texto" name="adjuntos_texto">
                   <input type="hidden" id="adjuntos_texto_csv" name="adjuntos_texto_csv">

@@ -216,7 +216,7 @@ function sendemailFiles($mail_username,$mail_userpassword,$mail_setFromEmail,$ma
 		echo 'Mailer Error: ' . $mail->ErrorInfo;
       return 0;
 	}else{
-		unlink($add_url."siat_folder/Siat/temp/Facturas-XML/".$datosCabecera['cuf'].".xml");
+		// unlink($add_url."siat_folder/Siat/temp/Facturas-XML/".$datosCabecera['cuf'].".xml");
 		unlink($add_url."siat_folder/Siat/temp/Facturas-XML/".$datosCabecera['cuf'].".pdf");
 		//UNLINK
 		// for ($i=0; $i <count($adjuntos) ; $i++) { 

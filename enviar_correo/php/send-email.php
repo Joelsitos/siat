@@ -53,7 +53,7 @@ $urlDir=$datValidar[0];
     $datosCabecera=[];
     while($datDatosVenta=mysqli_fetch_array($respDatosVenta)){
         $datosCabecera['cuf']=$datDatosVenta['siat_cuf'];
-        $datosCabecera['nombre_cliente']="<li>Raz&oacuote;n Social: ".$datDatosVenta['razon_social']."</li>";
+        $datosCabecera['nombre_cliente']="<li>Razón Social: ".$datDatosVenta['razon_social']."</li>";
 
         $datosCabecera['nro_factura']=$datDatosVenta[3];
         if($datDatosVenta['siat_codigotipodocumentoidentidad']==5){
@@ -79,7 +79,8 @@ $urlDir=$datValidar[0];
 
     // GENERACIÓN PDF
     unlink($add_url."siat_folder/Siat/temp/Facturas-XML/".$datosCabecera['cuf'].".pdf");
-    $urlSIAT="http://localhost/minka_siat_ibno/";
+    // $urlSIAT="http://localhost/minka_siat_ibno/";
+    $urlSIAT="http://ibnored.ibnorca.org/siat_ibno/";
     $url = $urlSIAT."formatoFacturaOnLine.php?codVenta=".$codPedidos;
     //Get content as a string. You can get local content or download it from the web.
     $downloadedFile = file_get_contents($url);
