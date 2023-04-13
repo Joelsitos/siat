@@ -377,7 +377,7 @@ $estadoFacturacion=$datConf[0];
                <p>FACTURA COMPUTARIZADA OFFLINE</p>
             </div>
          </a>
-        </div>
+        </div-->
         <div class="col-lg-4 col-md-8 mb-5 mb-lg-0 mx-auto">
          <a href='#' class="after-loop-item card border-0 card-tercero shadow-lg" style="background:#1074A6;color:#fff;" onclick="window.open('enviar_correo/index.php?datos=<?=$codSalida?>','detalle_factura'); return false;">
             <div class="card-body d-flex align-items-center flex-column">
@@ -385,7 +385,7 @@ $estadoFacturacion=$datConf[0];
                <p>FACTURA COMPUTARIZADA OFFLINE</p>
             </div>
          </a>
-        </div-->  
+        </div>  
         <?php
         }
 
