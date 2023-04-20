@@ -565,7 +565,7 @@ border-bottom: 1px solid #000;
             </tr>
             <tr >
               <td class="td-border-none text-left" width="25%" ><b>Nombre/Razón Social: </b></td>
-              <td class="td-border-none" ><?=$razonSocialCliente?></td>
+              <td class="td-border-none" ><?=utf8_decode($razonSocialCliente)?></td>
               <td class="td-border-none text-right" ><b>Cod. Cliente :</b></td>
               <td class="td-border-none">&nbsp;&nbsp;&nbsp;<?=$cod_cliente?></td>
             </tr>
