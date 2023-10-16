@@ -517,7 +517,7 @@ if($fecha1!="" && $fecha2!="")
 if($view==1){
 	$consulta = $consulta." and s.cod_tipo_doc=1 ";
 }   
-$consulta = $consulta."ORDER BY s.fecha desc, s.hora_salida desc limit 0, 70 ";
+$consulta = $consulta."ORDER BY s.fecha desc, s.hora_salida desc limit 0, 200 ";
 
 //echo $consulta;
 //

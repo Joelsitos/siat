@@ -76,7 +76,9 @@ $fechaLimiteEmision=mysqli_result($respDatosFactura,0,1);
 $codigoControl=mysqli_result($respDatosFactura,0,2);
 $nitCliente=mysqli_result($respDatosFactura,0,3);
 $razonSocialCliente=mysqli_result($respDatosFactura,0,4);
-$razonSocialCliente=strtoupper($razonSocialCliente);
+
+$razonSocialCliente=mb_strtoupper($razonSocialCliente);
+
 $fechaFactura=mysqli_result($respDatosFactura,0,5);
 
 $nombreEstudiante=mysqli_result($respDatosFactura,0,6);
