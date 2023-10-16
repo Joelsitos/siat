@@ -125,8 +125,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {//verificamos  metodo conexion
                     //     "mensaje"=>"ERROR. Variables incompletas");
                     // }
             }elseif($accion=="obtenerFacturaBase64Siat"){
-                $codFacturaIbno=$datos['codFacturaIbno'];
-                $codigoVenta=obtenerDatosFactura($codFacturaIbno,$enlaceCon);
+                $cod_factura_ibno     = empty($datos['codFacturaIbno']) ? '' : $datos['codFacturaIbno'];
+                $cod_salida_almacenes = empty($datos['idTrasaccionSiat']) ? '' : $datos['idTrasaccionSiat'];
+                $codigoVenta=obtenerDatosFactura($cod_factura_ibno, $cod_salida_almacenes, $enlaceCon);
                 if($codigoVenta>0){
                     require_once "../formatoFacturaOnLine_funcion.php";
                     $html=formatofacturaSIAT($codigoVenta);
@@ -581,13 +582,25 @@ function obtenerAlmacen($cod_ciudad_externo,$enlaceCon){
     return array($cod_ciudad,$cod_almacen,$cod_impuestos,$cod_entidad);
 }
 
-function obtenerDatosFactura($cod_factura_ibno,$enlaceCon){
+function obtenerDatosFactura($cod_factura_ibno, $cod_salida_almacenes, $enlaceCon){
     //require("conexionmysqli2.php");
-    $sql="SELECT cod_salida_almacenes from salida_almacenes where cod_factura_ibno=$cod_factura_ibno";
-    $resp=mysqli_query($enlaceCon,$sql);    
+
+    $filtro = "";
+    // Comprueba si cod_factura_ibno tiene valor
+    if (!empty($cod_factura_ibno)) {
+        $filtro = "cod_factura_ibno = " . $cod_factura_ibno;
+    }
+    // Comprueba si cod_salida_almacenes tiene valor
+    if (!empty($cod_salida_almacenes)) {
+        $filtro = "cod_salida_almacenes = " . $cod_salida_almacenes;
+    }
     $cod_salida_almacenes=0;
-    while ($dat = mysqli_fetch_array($resp)) {
-        $cod_salida_almacenes=$dat['cod_salida_almacenes'];
+    if(!empty($filtro)){
+        $sql="SELECT cod_salida_almacenes from salida_almacenes where ".$filtro;
+        $resp=mysqli_query($enlaceCon,$sql);    
+        while ($dat = mysqli_fetch_array($resp)) {
+            $cod_salida_almacenes=$dat['cod_salida_almacenes'];
+        }
     }
     return $cod_salida_almacenes;
 }
