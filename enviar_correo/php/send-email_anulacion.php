@@ -141,7 +141,8 @@ function envio_factura_token($codigoFac,$correosProveedor,$enlaceCon){
   while($datDatosVenta=mysqli_fetch_array($respDatosVenta)){
     $nombreCliente=$datDatosVenta[2];
     $datosCabecera['cuf']=$datDatosVenta['siat_cuf'];
-    $datosCabecera['nombre_cliente']="<li>Razón Social: ".$datDatosVenta['razon_social']."</li>";
+    // $datosCabecera['nombre_cliente']="<li>Razón Social: ".$datDatosVenta['razon_social']."</li>";
+    $datosCabecera['nombre_cliente']=$datDatosVenta['razon_social'];
     $datosCabecera['nro_factura']=$datDatosVenta[3];
     if($datDatosVenta['siat_codigotipodocumentoidentidad']==5){
       $datosCabecera['nit']=$datDatosVenta['nit'];  
@@ -152,6 +153,7 @@ function envio_factura_token($codigoFac,$correosProveedor,$enlaceCon){
     $datosCabecera['estado_siat']=$datDatosVenta['siat_estado_facturacion'];        
     $datosCabecera['fecha']=date("d/m/Y",strtotime($datDatosVenta['siat_fechaemision']));
   }
+  $codigo_nit_cliente = $datosCabecera['nit'];
   $mail_addAddress=$correosProveedor;
 
   // Separamos los correos por coma
@@ -163,35 +165,90 @@ function envio_factura_token($codigoFac,$correosProveedor,$enlaceCon){
   if (count($listaCorreos) > 1) {
       $otrosCorreos = implode(";", array_map('trim', array_slice($listaCorreos, 1)));
   }
-
   $titulo_pedido_email="IBNORCA SIAT";
-  $txt_message="Estimado Cliente: "."<br>\n<br>\n
-    Adjuntamos la factura Nro: ".$datosCabecera['nro_factura'].".";
-  $txt_message.="<br>\n<br>\n
-    Gracias."; //Con CUF: ".$cuf."<br>\n
-  $mail_subject=$titulo_pedido_email; //el subject del mensaje
-  $mail_setFromEmail="";
-  $mail_setFromName="";
+
+//   $txt_message="Estimado Cliente: "."<br>\n<br>\n
+//     Adjuntamos la factura Nro: ".$datosCabecera['nro_factura'].".";
+//   $txt_message.="<br>\n<br>\n
+//     Gracias."; //Con CUF: ".$cuf."<br>\n
+
+    // * CONTENIDO DE CORREO SIAT
+    // Mensaje principal al inicio del correo
+    $txt_message = "Estimado cliente,<br>
+    A continuación, podrá visualizar el detalle de la factura.<br>";
+
+    // Mensaje de pie de página, irá debajo del detalle de la factura
+    $txt_message_footer = "Adjuntamos la representación gráfica en formato PDF y el archivo XML de su factura electrónica.<br>";
+   $template = dirname(__DIR__) . "/php/PHPMailer/email_template_factura.html";
+      // Cargar y reemplazar plantilla
+    $message = file_get_contents($template);
+    $message = str_replace('{{titulo_men}}', $titulo_pedido_email, $message);
+    $message = str_replace('{{message}}', $txt_message, $message);
+    $message = str_replace('{{message_footer}}', $txt_message_footer, $message);
+
+    // Botón para verificación (solo si estado_siat == 1)
+    $botonEnvio = '<a href="' . $urlDir . '/consulta/QR?nit={{codigo_nit_gerente}}&cuf={{codigo_cuf}}&numero={{codigo_factura}}&t=2" 
+        style="text-decoration:none;display:inline-block;color:#ffffff;background-color: #2563eb;border-radius:20px;
+        width:auto;border:1px solid #2563eb;padding:5px 40px;font-family:Arial,sans-serif;text-align:center;"
+        target="_blank"><span style="font-size: 16px; line-height: 2;">Verificar Factura</span></a>';
+
+    if ($datosCabecera['estado_siat'] == 1) {
+        $message = str_replace('{{boton_verificar}}', $botonEnvio, $message);
+    } else {
+        $message = str_replace('{{boton_verificar}}', '', $message);
+    }
+    
+    // Obtener NIT del gerente desde configuración
+    $sqlConf = "SELECT valor FROM configuracion_facturas WHERE id = 9 LIMIT 1";
+    $respConf = mysqli_query($enlaceCon, $sqlConf);
+    $nitTxt = mysqli_result($respConf, 0, 0);
+
+    // Datos de la factura
+    $reemplazos = [
+        '{{codigo_cuf}}'          => $datosCabecera['cuf'],
+        '{{codigo_cliente}}'      => $datosCabecera['nombre_cliente'],
+        '{{codigo_nit}}'          => $datosCabecera['nit'],
+        '{{codigo_sucursal}}'     => $datosCabecera['sucursal'],
+        '{{codigo_fecha}}'        => $datosCabecera['fecha'],
+        '{{codigo_factura}}'      => $datosCabecera['nro_factura'],
+        '{{codigo_nit_gerente}}'  => $nitTxt,
+        '{{anio_gestion}}'        => date('Y'),
+    ];
+    foreach ($reemplazos as $clave => $valor) {
+        $message = str_replace($clave, $valor, $message);
+    }
+
+    $mail_subject=$titulo_pedido_email; //el subject del mensaje
+    $mail_setFromEmail="";
+    $mail_setFromName="";
 
 
-  /*AQUI ENVIAR CORREO*/
-  $sIde = "ifinanciero";
-  $sKey = "ce94a8dabdf0b112eafa27a5aa475751";
+    /*AQUI ENVIAR CORREO*/
+    $sIde = "ifinanciero";
+    $sKey = "ce94a8dabdf0b112eafa27a5aa475751";
 
-  // $rutaArchivo="c:/xampp/htdocs/ifinanciero/boletas20032023/";
-  // $nombreArchivo="facturademo.pdf";
-  $rutaArchivo="c:/xampp/htdocs/siat_ibno/siat_folder/Siat/temp/Facturas-XML/";
-  $nombreArchivo=$datosCabecera['cuf'].".pdf";
-  $parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, 
-            "accion"=>"EnviarCorreoCtaIbnoredFinanciero", 
-            "NombreEnvia"=>"Facturacion IBNORCA", 
-            "CorreoDestino"=>"$primerCorreo",
-            "CorreoCopia" => "$otrosCorreos",
-            "NombreDestino"=>"Cliente IBNORCA",
-            "Asunto"=>"Envío de Factura ".$titulo_pedido_email,
-            "Body"=>$txt_message,
-            "RutaArchivo"=>$rutaArchivo,
-            "NombreArchivo"=> $nombreArchivo
+    // $rutaArchivo="c:/xampp/htdocs/ifinanciero/boletas20032023/";
+    // $nombreArchivo="facturademo.pdf";
+    // * ARCHIVO XML
+    $rutaArchivo    = "c:/xampp/htdocs/siat_ibno/siat_folder/Siat/temp/Facturas-XML/";
+    $nombreArchivo  = $datosCabecera['cuf'].".xml";
+    // * ARCHIVO PDF
+    $rutaArchivo1   = "c:/xampp/htdocs/siat_ibno/siat_folder/Siat/temp/Facturas-XML/";
+    $nombreArchivo1 = $datosCabecera['cuf'].".pdf";
+    $parametros=array("sIdentificador"=>$sIde, "sKey"=>$sKey, 
+            "accion"        => "EnviarCorreoCtaFacturacion", 
+            "NombreEnvia"   => "Facturacion IBNORCA", 
+            "CorreoDestino" => "$primerCorreo",
+            // "CorreoCopia"   =>  "$otrosCorreos",
+            // "CorreoDestino" => "roalmirandadark@gmail.com",
+            "CorreoCopia"   =>  "roalmollericona@gmail.com;marco.luna@ibnorca.org",
+            "NombreDestino" => "Cliente IBNORCA",
+            "Asunto"        => "Envío de Factura ".$titulo_pedido_email,
+            "Body"          => $message,
+            "RutaArchivo"   => $rutaArchivo,
+            "NombreArchivo" => $nombreArchivo,
+            "RutaArchivo1"  => $rutaArchivo1,
+            "NombreArchivo1"=> $nombreArchivo1,
             );
   
     $datos=json_encode($parametros);
@@ -207,8 +264,9 @@ function envio_factura_token($codigoFac,$correosProveedor,$enlaceCon){
     header('Content-type: application/json');   
     //print_r($remote_server_output);   
     $respuestaEnvioCorreo = json_decode($remote_server_output, true);
+    print_r($respuestaEnvioCorreo);
     $estadoEnvioCorreo = $respuestaEnvioCorreo['estado'];
-    if ($estado) {
+    if ($estadoEnvioCorreo) {
         return 1;
     } else {
         return 2;

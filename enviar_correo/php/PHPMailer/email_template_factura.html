@@ -59,7 +59,7 @@
             font-weight: 600;
             color: #4b5563;
             display: inline-block;
-            width: 140px;
+            width: 100px;
             font-size: 13px;
         }
 
@@ -108,29 +108,30 @@
             <div class="info-box">
                 <div class="info-item">
                     <span class="info-label">Razón Social:</span>
-                    <span class="info-value">{{codigo_cliente}}</span>
+                    <span class="info-value" style="margin-left: 8px;">{{codigo_cliente}}</span>
                 </div>
                 <div class="info-item">
                     <span class="info-label">NIT:</span>
-                    <span class="info-value">{{codigo_nit}}</span>
+                    <span class="info-value" style="margin-left: 8px;">{{codigo_nit}}</span>
                 </div>
                 <div class="info-item">
                     <span class="info-label">Nro. Factura:</span>
-                    <span class="info-value">{{codigo_factura}}</span>
+                    <span class="info-value" style="margin-left: 8px;">{{codigo_factura}}</span>
                 </div>
                 <div class="info-item">
                     <span class="info-label">Fecha:</span>
-                    <span class="info-value">{{codigo_fecha}}</span>
+                    <span class="info-value" style="margin-left: 8px;">{{codigo_fecha}}</span>
                 </div>
                 <div class="info-item">
                     <span class="info-label">Sucursal:</span>
-                    <span class="info-value">{{codigo_sucursal}}</span>
+                    <span class="info-value" style="margin-left: 8px;">{{codigo_sucursal}}</span>
                 </div>
                 <div class="info-item">
                     <span class="info-label">CUF:</span>
-                    <span class="info-value">{{codigo_cuf}}</span>
+                    <span class="info-value" style="margin-left: 8px;">{{codigo_cuf}}</span>
                 </div>
             </div>
+            <p>{{message_footer}}</p>
 
             <div style="text-align:center; margin-top:20px;">
                 {{boton_verificar}}
