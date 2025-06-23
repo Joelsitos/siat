@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Factura Emitida</title>
+    <style>
+        body {
+            background-color: #f3f4f6;
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #374151;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e5e7eb;
+        }
+
+        .header {
+            background-color: #f9fafb;
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .content {
+            padding: 10px 30px 10px 30px;
+        }
+
+        .title {
+            color: #111827;
+            font-size: 20px;
+            font-weight: 600;
+            margin-top: 0px;
+            margin-bottom: 0px;
+            text-align: center;
+        }
+
+        .info-box {
+            background-color: #f9fafb;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #10b981;
+        }
+
+        .info-item {
+            margin-bottom: 10px;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #4b5563;
+            display: inline-block;
+            width: 140px;
+            font-size: 13px;
+        }
+
+        .info-value {
+            color: #111827;
+        }
+
+        .footer {
+            background-color: #f9fafb;
+            padding: 15px;
+            text-align: center;
+            font-size: 12px;
+            color: #6b7280;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .disclaimer {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 0px;
+            text-align: center;
+            font-style: italic;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="https://ibnored.ibnorca.org/ifinanciero/assets/img/logo_ibnorca.png" alt="Logo" height="70">
+        </div>
+        <div class="content">
+            <h1 class="title">{{titulo_men}}</h1>
+
+            <p>{{message}}</p>
+
+            <div class="info-box">
+                <div class="info-item">
+                    <span class="info-label">Razón Social:</span>
+                    <span class="info-value">{{codigo_cliente}}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">NIT:</span>
+                    <span class="info-value">{{codigo_nit}}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Nro. Factura:</span>
+                    <span class="info-value">{{codigo_factura}}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Fecha:</span>
+                    <span class="info-value">{{codigo_fecha}}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Sucursal:</span>
+                    <span class="info-value">{{codigo_sucursal}}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">CUF:</span>
+                    <span class="info-value">{{codigo_cuf}}</span>
+                </div>
+            </div>
+
+            <div style="text-align:center; margin-top:20px;">
+                {{boton_verificar}}
+            </div>
+        </div>
+
+        <div class="footer">
+            Este correo es generado automáticamente. Por favor no responda a este mensaje.<br>
+            © {{anio_gestion}} <b>IBNORCA</b> Todos los derechos reservados.
+        </div>
+
+    </div>
+</body>
+</html>

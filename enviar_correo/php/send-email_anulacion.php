@@ -72,7 +72,8 @@ function envio_factura($codigoFac,$correosProveedor,$enlaceCon){
   $datValidar=mysqli_fetch_array($respDir);   
   $urlDir=$datValidar[0];
 
-    $template="../enviar_correo/php/PHPMailer/email_template.html";//Ruta de la plantilla HTML para enviar nuestro mensaje
+    // $template="../enviar_correo/php/PHPMailer/email_template.html";//Ruta de la plantilla HTML para enviar nuestro mensaje
+    $template="../enviar_correo/php/PHPMailer/email_template_factura.html";
   
     $sqlDatosVenta="select DATE_FORMAT(s.fecha, '%d/%m/%Y'), t.`nombre`, ' ' as nombre_cliente, s.`nro_correlativo`, s.descuento, s.hora_salida,s.monto_total,s.monto_final,s.monto_efectivo,s.monto_cambio,s.cod_chofer,s.cod_tipopago,s.cod_tipo_doc,s.fecha,(SELECT cod_ciudad from almacenes where cod_almacen=s.cod_almacen)as cod_ciudad,s.cod_cliente,s.siat_cuf,s.siat_complemento,(SELECT nombre_tipopago from tipos_pago where cod_tipopago=s.cod_tipopago) as nombre_pago,s.siat_fechaemision,s.siat_codigotipoemision,s.siat_codigoPuntoVenta,(SELECT descripcionLeyenda from siat_sincronizarlistaleyendasfactura where codigo=s.siat_cod_leyenda) as leyenda,s.nit,
     (SELECT nombre_ciudad from ciudades where cod_ciudad=(SELECT cod_ciudad from almacenes where cod_almacen=s.cod_almacen))as nombre_ciudad,s.siat_codigotipodocumentoidentidad,s.siat_estado_facturacion, s.razon_social
@@ -86,7 +87,8 @@ function envio_factura($codigoFac,$correosProveedor,$enlaceCon){
     while($datDatosVenta=mysqli_fetch_array($respDatosVenta)){
       $nombreCliente=$datDatosVenta[2];
       $datosCabecera['cuf']=$datDatosVenta['siat_cuf'];
-      $datosCabecera['nombre_cliente']="<li>Razón Social: ".$datDatosVenta['razon_social']."</li>";
+      // $datosCabecera['nombre_cliente']="<li>Razón Social: ".$datDatosVenta['razon_social']."</li>";
+      $datosCabecera['nombre_cliente']=$datDatosVenta['razon_social'];
 
       $datosCabecera['nro_factura']=$datDatosVenta[3];
       if($datDatosVenta['siat_codigotipodocumentoidentidad']==5){
@@ -101,10 +103,7 @@ function envio_factura($codigoFac,$correosProveedor,$enlaceCon){
     $mail_addAddress=$correosProveedor;
 
     $titulo_pedido_email="IBNORCA SIAT"; //Factura Nro: ".$datosCabecera['nro_factura'];
-    $txt_message="Estimado Cliente: "."<br>\n<br>\n
-      Adjuntamos la factura Nro: ".$datosCabecera['nro_factura'].".";
-    $txt_message.="<br>\n<br>\n
-      Gracias."; //Con CUF: ".$cuf."<br>\n
+    $txt_message=""; //Con CUF: ".$cuf."<br>\n
     $mail_subject=$titulo_pedido_email; //el subject del mensaje
     $mail_setFromEmail="";
     $mail_setFromName="";
