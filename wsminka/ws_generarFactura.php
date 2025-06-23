@@ -490,7 +490,7 @@ function generarFacturaSiat($sucursal,$idRecibo,$fecha,$idPersona,$monto_total,$
                 }
                 InsertlogFacturas_salida($estado_facturado,"Resp.SIAT",$json,$enlaceCon);
                 //SACAMOS LA VARIABLE PARA ENVIAR EL CORREO O NO SI ES 1 ENVIAMOS CORREO DESPUES DE LA TRANSACCION
-                 $banderaCorreo=obtenerValorConfiguracion($enlaceCon,10);
+                $banderaCorreo=obtenerValorConfiguracion($enlaceCon,10);
                 // $banderaCorreo=1;
                 if($banderaCorreo==1){
                     //para correo solo en caso de offline y online
@@ -511,50 +511,31 @@ function generarFacturaSiat($sucursal,$idRecibo,$fecha,$idPersona,$monto_total,$
                     $codigoVenta=$codigo;
                     require_once "../descargarFacturaPDF2.php";
 
-                    $estado_envio=envio_factura($codigoVenta,$correo_destino,$enlaceCon);
+                    /**********************************/
+                    /************ ENVIO DE CORREO ********/
+                    /**********************************/
+                    //$estado_envio=envio_factura($codigoVenta,$correo_destino,$enlaceCon);
+                    $estado_envio=envio_factura_token($codigoVenta,$correo_destino,$enlaceCon);
+                    /**********************************/
+                    /************ FIN ENVIO DE CORREO ********/
+                    /**********************************/
+
                     if($estado_envio==1){
-                        //$texto_correo="<span style=\"border:1px;font-size:18px;color:#91d167;\"><b>SE ENVIÓ EL CORREO CON EXITO.</b></span>";
+                        //ENVIO EXITOSO
                     }elseif($estado_envio==0){
-                        //$texto_correo="<span style=\"border:1px;font-size:18px;color:orange;\"><b>EL CLIENTE NO TIENE UN CORREO REGISTRADO</b></span>";
+                        //EL CLIENTE NO TIENE UN CORREO REGISTRADO
                     }else{
-                        //$texto_correo="<span style=\"border:1px;font-size:18px;color:red;\"><b>Ocurrio un error al enviar el correo, vuelva a intentarlo.</b></span>";
+                        //Ocurrio un error al enviar el correo, vuelva a intentarlo
                     }
-                    // echo "<script language='Javascript'>
-                    //     Swal.fire({
-                    //     title: 'SIAT: ".$mensaje."',
-                    //     html: '".$texto_correo."',
-                    //     type: 'success'
-                    //     }).then(function() {
-                    //        location.href='navegadorVentas.php'; 
-                    //     });
-                    //     </script>";
-                    
+
                     return array($estado_facturado,$mensaje,$codigo,$nro_correlativo);
-                    // $texto_correo="<span style=\"border:1px;font-size:18px;color:#91d167;\"><b>¿DESEAS ENVIAR CORREO?</b></span>";
-                    // echo "<script language='Javascript'>
                 }else{
-                    // echo "<script language='Javascript'>
-                    //  Swal.fire({
-                    //     title: 'SIAT: ".$mensaje."',
-                    //     html: '".$texto_correo."',
-                    //     type: 'success'
-                    //  }).then(function() {
-                    //      location.href='navegadorVentas.php';
-                    //  });
-                    //  </script>";
-                    
                     return array($estado_facturado,$mensaje,$codigo,$nro_correlativo);
                 }
 
             // }
         }   
     }else{
-            // echo "<script type='text/javascript' language='javascript'>
-            //  alert('Ocurrio un error en la transaccion. Contacte con el administrador del sistema.');
-                
-            // </script>";//location.href='navegador_salidamateriales.php';
-        // $errorEmision = 1;
-
         $mensaje="Ocurrio un error en la transaccion. Contacte con el administrador del sistema";
         $estado_facturado=2;//error
         //InsertlogFacturas_salida($estado_facturado,$mensaje,null,$enlaceCon);
@@ -739,67 +720,20 @@ function anularFacturaSiat($codigo_registro,$enviar_correo,$correo_destino,$rpt_
                     }else{
                         $texto_correo="<span style=\"border:1px;font-size:18px;color:red;\"><b>Ocurrio un error al enviar el correo, vuelva a intentarlo.</b></span>";
                     }
-
-                    // echo "<script language='Javascript'>
-                    //     Swal.fire({
-                    //     title: 'SIAT: ".$mensaje." :)',
-                    //     html: '".$texto_correo."',
-                    //     type: 'success'
-                    //     }).then(function() {
-                    //         location.href='dFacturaElectronica.php?codigo_salida=".$codigo_registro."';
-                    //     });
-                    //     </script>";
                     return array(true,$mensaje);
                 }else{
-                    // echo "<script language='Javascript'>
-                    // Swal.fire({
-                    // title: 'SIAT: ".$mensaje." :)',
-                    // html: '<b>EL CLIENTE NO TIENE UN CORREO REGISTRADO.</b>',
-                    // text: '',
-                    // type: 'success'
-                    // }).then(function() {
-                    //     location.href='dFacturaElectronica.php?codigo_salida=".$codigo_registro."';
-                    // });
-                    // </script>";
                     return array(true,$mensaje);
                 }
 
             }else{
-                // echo "<script language='Javascript'>
-                //     Swal.fire({
-                //     title: 'SIAT: ".$mensaje." :(',
-                //     text: '',
-                //     type: 'error'
-                // }).then(function() {
-                //     location.href='dFacturaElectronica.php?codigo_salida=".$codigo_registro."';
-                // });
-                // </script>";
                 return array(false,$mensaje);
             }
         }else{
             $mensaje="CUFD invalido para la Fecha de Emisión :(";
-            // echo "<script language='Javascript'>
-            //     Swal.fire({
-            //     title: 'CUFD invalido para la Fecha de Emisión :(',
-            //     text: '',
-            //     type: 'error'
-            // }).then(function() {
-            //     location.href='dFacturaElectronica.php?codigo_salida=".$codigo_registro."';
-            // });
-            //         </script>";
             return array(false,$mensaje);
         }
     }else{
         $mensaje="FACTURA YA ANULADA! :(";
-        // echo "<script language='Javascript'>
-        //     Swal.fire({
-        //     title: 'FACTURA YA ANULADA! :(',
-        //     text: '',
-        //     type: 'error'
-        // }).then(function() {
-        //     location.href='dFacturaElectronica.php?codigo_salida=".$codigo_registro."';
-        // });
-        //         </script>"; 
         return array(false,$mensaje);
     }
 
