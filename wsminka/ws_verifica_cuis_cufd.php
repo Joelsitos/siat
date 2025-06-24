@@ -113,7 +113,7 @@ function verificarCodigoCufdActual($cod_ciudad, $cod_ciudad_externo, $fecha, $cu
             generarCufd($cod_ciudad_externo, $cod_impuestos, $puntoVenta, $cod_entidad);
         }
         $intentos++;
-    } while ($intentos < 4);
+    } while ($intentos < 5);
 
     return false;
 }
