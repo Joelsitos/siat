@@ -385,3 +385,151 @@ function envio_factura_token_solo($codigoFac,$correosProveedor,$enlaceCon,$nombr
         return 2;
     }
 }
+
+
+
+
+/******************************************
+ * ENVIO DE CORREO DE FACTURA ANULADA
+ * 1: Factura Generada
+ * 2: Anulación
+ ******************************************/
+function envio_factura_anulacion_token($codigoFac, $correosProveedor, $enlaceCon){
+    $rutaArchivo = "";
+    $rutaArchivoCSV = "";
+    $fechaActual = date("Y-m-d H:i:s");
+
+    // Obtener URL de consulta desde configuración
+    $sqlDir = "SELECT valor_configuracion FROM configuraciones WHERE id_configuracion = 46";
+    $respDir = mysqli_query($enlaceCon, $sqlDir);
+    $datValidar = mysqli_fetch_array($respDir);
+    $urlDir = $datValidar[0];
+
+    // Obtener datos de la factura anulada
+    $sqlDatosVenta = "SELECT 
+            DATE_FORMAT(s.fecha, '%d/%m/%Y'),
+            t.nombre,
+            ' ' AS nombre_cliente,
+            s.nro_correlativo,
+            s.descuento,
+            s.hora_salida,
+            s.monto_total,
+            s.monto_final,
+            s.monto_efectivo,
+            s.monto_cambio,
+            s.cod_chofer,
+            s.cod_tipopago,
+            s.cod_tipo_doc,
+            s.fecha,
+            (SELECT cod_ciudad FROM almacenes WHERE cod_almacen = s.cod_almacen) AS cod_ciudad,
+            s.cod_cliente,
+            s.siat_cuf,
+            s.siat_complemento,
+            (SELECT nombre_tipopago FROM tipos_pago WHERE cod_tipopago = s.cod_tipopago) AS nombre_pago,
+            s.siat_fechaemision,
+            s.siat_codigotipoemision,
+            s.siat_codigoPuntoVenta,
+            (SELECT descripcionLeyenda FROM siat_sincronizarlistaleyendasfactura WHERE codigo = s.siat_cod_leyenda) AS leyenda,
+            s.nit,
+            (SELECT nombre_ciudad FROM ciudades WHERE cod_ciudad = (SELECT cod_ciudad FROM almacenes WHERE cod_almacen = s.cod_almacen)) AS nombre_ciudad,
+            s.siat_codigotipodocumentoidentidad,
+            s.siat_estado_facturacion,
+            s.razon_social
+        FROM salida_almacenes s
+        JOIN tipos_docs t ON s.cod_tipo_doc = t.codigo
+        WHERE s.cod_salida_almacenes IN ($codigoFac)";
+    
+    $respDatosVenta = mysqli_query($enlaceCon, $sqlDatosVenta);
+    $datosCabecera = [];
+
+    while ($dat = mysqli_fetch_array($respDatosVenta)) {
+        $datosCabecera['cuf'] = $dat['siat_cuf'];
+        $datosCabecera['nombre_cliente'] = $dat['razon_social'];
+        $datosCabecera['nro_factura'] = $dat[3];
+        $datosCabecera['nit'] = $dat['siat_codigotipodocumentoidentidad'] == 5 
+            ? $dat['nit'] 
+            : $dat['nit'] . ' ' . $dat['siat_complemento'];
+        $datosCabecera['sucursal'] = $dat['nombre_ciudad'];
+        $datosCabecera['estado_siat'] = $dat['siat_estado_facturacion'];
+        $datosCabecera['fecha'] = date("d/m/Y", strtotime($dat['siat_fechaemision']));
+    }
+
+    // Correos
+    $listaCorreos = explode(",", $correosProveedor);
+    $primerCorreo = trim($listaCorreos[0]);
+    $otrosCorreos = count($listaCorreos) > 1 ? implode(";", array_map('trim', array_slice($listaCorreos, 1))) : "";
+
+    // Asunto y plantilla
+    $titulo_pedido_email = "IBNORCA SIAT - FACTURA ANULADA";
+    $txt_message = "Estimado Cliente,<br><br>
+        Le informamos que la factura Nro: <strong>{$datosCabecera['nro_factura']}</strong> ha sido <strong>anulada</strong> en nuestro sistema. 
+        A continuación, podrá visualizar el detalle de la factura.";
+
+    $txt_message_footer = "";
+    $template = dirname(__DIR__) . "/php/PHPMailer/email_template_factura.html";
+    $message = file_get_contents($template);
+    $message = str_replace('{{titulo_men}}', $titulo_pedido_email, $message);
+    $message = str_replace('{{message}}', $txt_message, $message);
+    $message = str_replace('{{message_footer}}', $txt_message_footer, $message);
+
+    // Botón para verificar
+    $botonEnvio = '<a href="' . $urlDir . '/consulta/QR?nit={{codigo_nit_gerente}}&cuf={{codigo_cuf}}&numero={{codigo_factura}}&t=2" 
+        style="text-decoration:none;display:inline-block;color:#ffffff;background-color: #2563eb;border-radius:20px;
+        width:auto;border:1px solid #2563eb;padding:5px 40px;font-family:Arial,sans-serif;text-align:center;"
+        target="_blank"><span style="font-size: 16px; line-height: 2;">Verificar Factura</span></a>';
+
+    $message = str_replace('{{boton_verificar}}', $datosCabecera['estado_siat'] == 1 ? $botonEnvio : '', $message);
+
+    // Obtener NIT gerente
+    $sqlConf = "SELECT valor FROM configuracion_facturas WHERE id = 9 LIMIT 1";
+    $respConf = mysqli_query($enlaceCon, $sqlConf);
+    $nitTxt = mysqli_result($respConf, 0, 0);
+
+    // Reemplazos
+    $reemplazos = [
+        '{{codigo_cuf}}'          => $datosCabecera['cuf'],
+        '{{codigo_cliente}}'      => $datosCabecera['nombre_cliente'],
+        '{{codigo_nit}}'          => $datosCabecera['nit'],
+        '{{codigo_sucursal}}'     => $datosCabecera['sucursal'],
+        '{{codigo_fecha}}'        => $datosCabecera['fecha'],
+        '{{codigo_factura}}'      => $datosCabecera['nro_factura'],
+        '{{codigo_nit_gerente}}'  => $nitTxt,
+        '{{anio_gestion}}'        => date('Y'),
+    ];
+    foreach ($reemplazos as $clave => $valor) {
+        $message = str_replace($clave, $valor, $message);
+    }
+
+    // Parámetros para envío
+    $parametros = [
+        "sIdentificador"   => "ifinanciero",
+        "sKey"             => "ce94a8dabdf0b112eafa27a5aa475751",
+        "accion"           => "EnviarCorreoCtaFacturacion",
+        "NombreEnvia"      => "Facturacion IBNORCA",
+        "CorreoDestino"    => $primerCorreo,
+        "CorreoCopia"      => "",
+        "NombreDestino"    => "Cliente IBNORCA",
+        "Asunto"           => $titulo_pedido_email,
+        "Body"             => $message,
+        "RutaArchivo"      => "",
+        "NombreArchivo"    => "",
+        "RutaArchivo1"     => "",
+        "NombreArchivo1"   => "",
+    ];
+
+    // Envío por CURL
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, "http://ibnored.ibnorca.org/wsibno/correo/ws-correotoken.php");
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($parametros));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $remote_server_output = curl_exec($ch);
+    curl_close($ch);
+
+    // Respuesta
+    header('Content-type: application/json');
+    $respuestaEnvioCorreo = json_decode($remote_server_output, true);
+    print_r($respuestaEnvioCorreo);
+
+    return $respuestaEnvioCorreo['estado'] ? 1 : 2;
+}
