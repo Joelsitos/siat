@@ -47,24 +47,6 @@ while($dat_verif=mysqli_fetch_array($resp_verif)){
 	$idproveedor=$dat_verif['cod_cliente'];
 	// $correo_destino=obtenerCorreosListaCliente($idproveedor);
 }		
-$estado_envio = envio_factura_anulacion_token($idproveedor, $correo_destino, $enlaceCon, 2);
-if($estado_envio==1){
-	$texto_correo="<span style=\"border:1px;font-size:18px;color:#91d167;\"><b>SE ENVIÓ EL CORREO CON EXITO.</b></span>";
-}elseif($estado_envio==0){
-	$texto_correo="<span style=\"border:1px;font-size:18px;color:orange;\"><b>EL CLIENTE NO TIENE UN CORREO REGISTRADO</b></span>";
-}else{
-	$texto_correo="<span style=\"border:1px;font-size:18px;color:red;\"><b>Ocurrio un error al enviar el correo, vuelva a intentarlo.</b></span>";
-}
-echo "<script language='Javascript'>
-	Swal.fire({
-	title: 'SIAT: ".$mensaje." :)',
-	html: '".$texto_correo."',
-	type: 'success'
-	}).then(function() {
-		location.href='dFacturaElectronica.php?codigo_salida=".$codigo_registro."';
-	});
-	</script>";
-exit;
 // $anulado==0;
 if($anulado==0){ //verificamos si no está anulado // 0 no anulada 1 //anulado
 	if($cufd<>"0" and $cuis<>"0"){
@@ -98,7 +80,7 @@ if($anulado==0){ //verificamos si no está anulado // 0 no anulada 1 //anulado
 			if($enviar_correo){
 				// header("location:sendEmailVenta.php?codigo=$codigo_registro&evento=2&tipodoc=1");
 				// $estado_envio=envio_facturaanulada($idproveedor,$proveedor,$nro_correlativo,$cuf,$nitCliente,$sucursalCliente,$estado_siatCliente,$fechaCliente,$correo_destino,$enlaceCon);
-				$estado_envio = envio_factura_token($idproveedor, $correo_destino, $enlaceCon, 2);
+				$estado_envio = envio_factura_anulacion_token($idproveedor, $correo_destino, $enlaceCon);
 				if($estado_envio==1){
 					$texto_correo="<span style=\"border:1px;font-size:18px;color:#91d167;\"><b>SE ENVIÓ EL CORREO CON EXITO.</b></span>";
 				}elseif($estado_envio==0){
